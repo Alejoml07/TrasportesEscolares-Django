@@ -1,0 +1,82 @@
+{%extends "transportes/index.html"%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Proveedor</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+
+</head>
+<body>
+   
+
+    {%block contenedor%}
+    <a class="btn btn-warning" href="{% url 'transportes:registrarProveedores' %}">Agregar</a>
+    {% if messages %}
+
+        {% for message in messages %}
+            <div class="alert alert-{%if message.tags%}{{message.tags}}{%else%}dark{%endif%}" role = "alert">{{message}}</div>
+        {% endfor %}
+
+    {% endif %}
+
+    {%if datosR%}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>nombre</th>
+                    <th>apellido</th>
+                    <th>correo</th>
+                    <th>direccion</th>
+                    <th>documento</th>
+                    <th>fecha_nacimiento</th>
+                    <th>marca_veh</th>
+                    <th>color_veh</th>
+                    <th>documentacion_veh</th>
+
+
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                {%for t in datosR %}
+                <tr>
+                    <th>{{t.id}}</th>
+                    <th>{{t.nombre}}</th>
+                    <th>{{t.apellido}}</th>
+                    <th>{{t.correo}}</th>
+                    <th>{{t.direccion}}</th>
+                    <th>{{t.documento}}</th>
+                    <th>{{t.fecha_nacimiento}}</th>
+                    <th>{{t.marca_veh}}</th>
+                    <th>{{t.color_veh}}</th>
+                    <th>{{t.documentacion_veh}}</th>
+
+
+
+                </tr>
+                
+                {%endfor%}
+            </tbody>
+            
+        </table>
+
+
+    {%else%}
+        No hay datos...
+    {%endif%}
+
+    {%endblock%}
+
+
+    <script src="{% static 'transportes/js/popper.min.js' %}"></script>
+    <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>

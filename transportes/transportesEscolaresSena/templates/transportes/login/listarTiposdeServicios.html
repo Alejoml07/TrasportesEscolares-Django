@@ -1,0 +1,69 @@
+{%extends "transportes/index.html"%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Comentarios</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+
+</head>
+<body>
+    
+
+    {%block contenedor%}
+    <a class="btn btn-warning" href="{% url 'transportes:registrarTiposdeServicios' %}">Agregar</a>
+
+    {% if messages %}
+
+        {% for message in messages %}
+            <div class="alert alert-{%if message.tags%}{{message.tags}}{%else%}dark{%endif%}" role = "alert">{{message}}</div>
+        {% endfor %}
+
+    {% endif %}
+
+    {%if datosT%}
+        <table class="table table-striped"> 
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Caracteristicas</th>
+                   
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                {%for t in datosT %}
+                <tr>
+                    <th>{{t.id}}</th>
+                    <th>{{t.nombre}}</th>
+                    <th>{{t.caracteristicas}}</th>
+                    
+
+
+                </tr>
+                
+                {%endfor%}
+            </tbody>
+            
+        </table>
+
+
+    {%else%}
+        No hay datos...
+    {%endif%}
+
+    {%endblock%}
+
+
+    <script src="{% static 'transportes/js/popper.min.js' %}"></script>
+    <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+
+    
+</body>
+</html>
