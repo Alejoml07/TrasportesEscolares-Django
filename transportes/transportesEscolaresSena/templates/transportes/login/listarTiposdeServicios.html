@@ -31,6 +31,9 @@
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Caracteristicas</th>
+                    <th>Operaciones</th>
+
+
                    
 
 
@@ -40,9 +43,18 @@
             <tbody>
                 {%for t in datosT %}
                 <tr>
-                    <th>{{t.id}}</th>
-                    <th>{{t.nombre}}</th>
-                    <th>{{t.caracteristicas}}</th>
+                    <td>{{t.id}}</td>
+                    <td>{{t.nombre}}</td>
+                    <td>{{t.caracteristicas}}</td>
+                    <td>
+                        
+                            <div class="d-grid gap-2 d-md-block">
+                                <a class="btn btn-dark" href="{% url 'transportes:eliminarTiposdeServicios' t.id %}">Eliminar</a>
+    
+                                <a class="btn btn-info" href="{% url 'transportes:formularioEditarTiposdeServcios' t.id %}">Editar</a>
+                            </div>
+                        
+                    </td>
                     
 
 

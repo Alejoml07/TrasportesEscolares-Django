@@ -34,6 +34,8 @@
                     <th>direccion</th>
                     <th>documento</th>
                     <th>fecha_nacimiento</th>
+                    <th>Operaciones</th>
+
 
 
 
@@ -42,13 +44,20 @@
             <tbody>
                 {%for t in datos %}
                 <tr>
-                    <th>{{t.id}}</th>
-                    <th>{{t.nombre}}</th>
-                    <th>{{t.apellido}}</th>
-                    <th>{{t.correo}}</th>
-                    <th>{{t.direccion}}</th>
-                    <th>{{t.documento}}</th>
-                    <th>{{t.fecha_nacimiento}}</th>
+                    <td>{{t.id}}</td>
+                    <td>{{t.nombre}}</td>
+                    <td>{{t.apellido}}</td>
+                    <td>{{t.correo}}</td>
+                    <td>{{t.direccion}}</td>
+                    <td>{{t.documento}}</td>
+                    <td>{{t.fecha_nacimiento}}</td>
+                    <td>
+                        <div class="d-grid gap-2 d-md-block">
+                            <a class="btn btn-dark" href="{% url 'transportes:eliminarUsuario' t.id %}">Eliminar</a>
+
+                            <a class="btn btn-info" href="{% url 'transportes:formularioEditar' t.id %}">Editar</a>
+                        </div>
+                    </td>
 
 
                 </tr>

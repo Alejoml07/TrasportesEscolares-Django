@@ -12,7 +12,7 @@
 </head>
 <body>
     {%block contenedor%}
-    <h3>Agregar Peticiones</h3>('cliente', 'servicios', 'direccion', 'colegio', 'horario', 'comentario_add', )
+    <h3>Agregar Peticiones</h3>
     <form action="{%url 'transportes:guardarPeticiones'%}" method="post">
         {%csrf_token%}
         <div class="mb-3 mt-3">

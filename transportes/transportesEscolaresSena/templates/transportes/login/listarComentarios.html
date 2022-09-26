@@ -25,13 +25,15 @@
     {% endif %}
 
     {%if datosC%}
-        <table class="table table-striped">('cliente', 'tipo', 'desc', )
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>cliente</th>
                     <th>tipo</th>
                     <th>descripcion</th>
+                    <th>Operaciones</th>
+
                    
 
 
@@ -41,10 +43,17 @@
             <tbody>
                 {%for t in datosC %}
                 <tr>
-                    <th>{{t.id}}</th>
-                    <th>{{t.cliente}}</th>
-                    <th>{{t.tipo}}</th>
-                    <th>{{t.desc}}</th>
+                    <td>{{t.id}}</td>
+                    <td>{{t.cliente}}</td>
+                    <td>{{t.tipo}}</td>
+                    <td>{{t.desc}}</td>
+                    <td>
+                        <div class="d-grid gap-2 d-md-block">
+                            <a class="btn btn-dark" href="{% url 'transportes:eliminarComentarios' t.id %}">Eliminar</a>
+
+                            <a class="btn btn-info" href="{% url 'transportes:formularioEditarComentarios' t.id %}">Editar</a>
+                        </div>
+                    </td>
                     
 
 

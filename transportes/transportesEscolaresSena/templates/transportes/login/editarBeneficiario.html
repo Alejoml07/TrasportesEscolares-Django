@@ -12,35 +12,36 @@
 </head>
 <body>
     {%block contenedor%}
-    <h3>Agregar Usuario</h3>
-    <form action="{%url 'transportes:guardarBeneficiario'%}" method="post">
+    <h3>Editar Beneficiario</h3>
+    <form action="{%url 'transportes:actualizarBeneficiario'%}" method="post">
         {%csrf_token%}
-
+        <input type="hidden" name="id" value="{{ beneficiario.id }}"/>
         <div class="mb-3 mt-3">
-          <label>Cliente</label>
-          <select class="form-control" name="cliente">
-              <option value="">Seleccione:</option>
-              {% for c in cli %}
-                  <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
-              {% endfor %}
-          </select>
+            <label>Cliente</label>
+            <select class="form-control" name="cliente">
+                <option value="">Seleccione:</option>
+                {% for c in cli %}
+                    <option value="{{ c.id }}"{% if beneficiario.cliente.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
+                {% endfor %}
+            </select>
+    
         </div>
        
           <div class="mb-3 mt-3">
             <label for="" class="form-label">nombre:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="nombre">
+            <input type="text" class="form-control" id="" value="{{ beneficiario.nombre }}" name="nombre">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">apellido:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese Apellido" name="apellido">
+            <input type="text" class="form-control" id="" value="{{ beneficiario.apellido }}" name="apellido">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">documento:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese Documento" name="documento">
+            <input type="text" class="form-control" id="" value="{{ beneficiario.documento }}" name="documento">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Fecha de Nacimiento:</label>
-            <input type="date" class="form-control" id="" placeholder="Ingrese fecha de nacimiento" name="fecha_nacimiento">
+            <input type="date" class="form-control" id="" value="{{ beneficiario.fecha_nacimiento }}" name="fecha_nacimiento">
           </div>
           
          

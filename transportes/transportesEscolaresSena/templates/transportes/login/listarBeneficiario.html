@@ -34,6 +34,8 @@
                     <th>apellido</th>
                     <th>docuemnto</th>
                     <th>fecha_nacimiento</th>
+                    <th>Operaciones</th>
+
 
 
 
@@ -42,12 +44,22 @@
             <tbody>
                 {%for t in datosB %}
                 <tr>
-                    <th>{{t.id}}</th>
-                    <th>{{t.cliente}}</th>
-                    <th>{{t.nombre}}</th>
-                    <th>{{t.apellido}}</th>
-                    <th>{{t.documento}}</th>
-                    <th>{{t.fecha_nacimiento}}</th>
+                    <td>{{t.id}}</td>
+                    <td>{{t.cliente}}</td>
+                    <td>{{t.nombre}}</td>
+                    <td>{{t.apellido}}</td>
+                    <td>{{t.documento}}</td>
+                    <td>{{t.fecha_nacimiento}}</td>
+                    <td>
+                        <div class="d-grid gap-2 d-md-block">
+                            <a class="btn btn-dark" href="{% url 'transportes:eliminarBeneficiario' t.id %}">Eliminar</a>
+
+                            <a class="btn btn-info" href="{% url 'transportes:formularioEditarBeneficiario' t.id %}">Editar</a>
+                        </div>
+                    </td>
+
+
+
 
 
                 </tr>

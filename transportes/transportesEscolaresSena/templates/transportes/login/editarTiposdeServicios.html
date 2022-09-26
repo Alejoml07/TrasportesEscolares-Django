@@ -12,22 +12,18 @@
 </head>
 <body>
     {%block contenedor%}
-    <h3>Agregar Servicio</h3>
-    <form action="{%url 'transportes:guardarServicios'%}" method="post">
+    <h3>Editar Tipo de Servicio</h3>
+    <form action="{%url 'transportes:actualizarTiposdeServicios'%}" method="post">
         {%csrf_token%}
+        <input type="hidden" name="id" value="{{ TipoServ.id }}"/>
+
         <div class="mb-3 mt-3">
           <label for="" class="form-label">Nombre:</label>
-          <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="nombre">
+          <input type="text" class="form-control" id="" value="{{ TipoServ.nombre }}" name="nombre">
         </div>
         <div class="mb-3 mt-3">
-          <label>Tipo de servicio:</label>
-          <select class="form-control" name="tipo_serv">
-              <option value="">Seleccione:</option>
-              {% for c in TipoServ %}
-                  <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
-              {% endfor %}
-          </select>
-          
+            <label for="" class="form-label">Caracteristicas:</label>
+            <input type="text" class="form-control" id="" value="{{ TipoServ.caracteristicas }}" name="caracteristicas">
           </div>
           
         

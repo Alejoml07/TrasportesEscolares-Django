@@ -13,21 +13,22 @@
 <body>
     {%block contenedor%}
     <h3>Agregar Servicio</h3>
-    <form action="{%url 'transportes:guardarServicios'%}" method="post">
+    <form action="{%url 'transportes:actualizarServicios'%}" method="post">
         {%csrf_token%}
+        <input type="hidden" name="id" value="{{ servicios.id }}"/>
         <div class="mb-3 mt-3">
           <label for="" class="form-label">Nombre:</label>
-          <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="nombre">
+          <input type="text" class="form-control" id=""  value="{{ servicios.nombre }}" name="nombre">
         </div>
         <div class="mb-3 mt-3">
           <label>Tipo de servicio:</label>
-          <select class="form-control" name="tipo_serv">
-              <option value="">Seleccione:</option>
-              {% for c in TipoServ %}
-                  <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
-              {% endfor %}
-          </select>
-          
+            <select class="form-control" name="tipo_serv">
+                <option value="">Seleccione:</option>
+                {% for c in tipo_serv  %}
+                    <option value="{{ c.id }}"{% if servicios.tipo_serv.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
+                {% endfor %}
+            </select>
+
           </div>
           
         
