@@ -374,12 +374,25 @@ def listarPeticiones(request):
     return render(request, 'transportes/login/listarPeticiones.html', contextoP)
 
 def registrarPeticiones(request):
-    return render(request, 'transportes/login/registrarPeticiones.html')
+    c = Cliente.objects.all()
+    s = Servicios.objects.all()
+    contexto = {'cli':c,'servicios':s}
+    return render(request, 'transportes/login/registrarPeticiones.html',contexto)
 
 def guardarPeticiones(request):
     try:
+        c =  Cliente.objects.get(pk = request.POST["cliente"])
+        s =  Servicios.objects.get(pk = request.POST["servicios"])
+
+
         if request.method == "POST":
-            q = Peticiones(cliente = request.POST["cliente"],servicios = request.POST["servicios"],direccion = request.POST["direccion"],colegio = request.POST["colegio"],horario = request.POST["horario"],comentario_add = request.POST["comentario_add"])
+            q = Peticiones(
+                cliente = c,
+                servicios = s,
+                direccion = request.POST["direccion"],
+                colegio = request.POST["colegio"],
+                horario = request.POST["horario"],
+                comentario_add = request.POST["comentario_add"])
             q.save()
 
             messages.success(request, "Trabajador guardado exitosamente")
@@ -390,6 +403,57 @@ def guardarPeticiones(request):
         messages.error(request, f"Error: {e}")
     
     return redirect('transportes:listarPeticiones')
+
+
+def formularioEditarPeticiones(request, id):
+    p = Peticiones.objects.get(pk = id)
+    s = Servicios.objects.all()
+    c = Cliente.objects.all()
+    contexto = { "peticiones": p, "cli":c, 'servicios':s }
+    return render(request, 'transportes/login/editarPeticiones.html', contexto)
+
+
+def actualizarPeticiones(request):
+    try:
+        if request.method == "POST":
+            #Obtener la instancia de producto a modificar
+            p =  Peticiones.objects.get(pk = request.POST["id"])
+            s = Servicios.objects.get(pk = request.POST["servicios"])
+            c = Cliente.objects.get(pk = request.POST["cliente"])
+
+
+            p.cliente = c
+            p.servicios = s
+            p.direccion = request.POST["direccion"]
+            p.colegio = request.POST["colegio"]
+            p.horario = request.POST["horario"]
+            p.comentario_add = request.POST["comentario_add"]
+           
+
+            p.save()
+            messages.success(request, "Producto actualizado correctamente!!")
+        else:
+            messages.warning(request, "Usted no ha enviado datos...")
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+    
+    return redirect('transportes:listarPeticiones')
+
+
+def eliminarPeticiones(request, id):
+    try:
+        p =  Peticiones.objects.get(pk = id)
+        p.delete()
+        messages.success(request, "Producto eliminado correctamente!!")
+    except IntegrityError:
+        messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+    
+    return redirect('transportes:listarPeticiones')
+
+
+#--------------------PROVEEDORES----------------------------------------
 
 def listarProveedores(request):
     r = Proveedores.objects.all()
@@ -403,13 +467,67 @@ def registrarProveedores(request):
 def guardarProveedores(request):
     try:
         if request.method == "POST":
-            q = Proveedores(nombre = request.POST["nombre"],apellido = request.POST["apellido"],correo = request.POST["correo"],direccion = request.POST["direccion"],documento = request.POST["documento"],fecha_nacimiento = request.POST["fecha_nacimiento"],marca_veh = request.POST["marca_veh"],color_veh = request.POST["color_veh"],documentacion_veh = request.POST["documentacion_veh"])
+            q = Proveedores(
+                nombre = request.POST["nombre"],
+                apellido = request.POST["apellido"],
+                correo = request.POST["correo"],
+                direccion = request.POST["direccion"],
+                documento = request.POST["documento"],
+                fecha_nacimiento = request.POST["fecha_nacimiento"],
+                marca_veh = request.POST["marca_veh"],
+                color_veh = request.POST["color_veh"],
+                documentacion_veh = request.POST["documentacion_veh"])
             q.save()
 
             messages.success(request, "Trabajador guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+    
+    return redirect('transportes:listarProveedores')
+
+def formularioEditarProveedores(request, id):
+    p = Proveedores.objects.get(pk = id)
+    contexto = { "proveedores": p }
+    return render(request, 'transportes/login/editarProveedores.html', contexto)
+
+
+def actualizarProveedores(request):
+    try:
+        if request.method == "POST":
+            #Obtener la instancia de producto a modificar
+            p =  Proveedores.objects.get(pk = request.POST["id"])
+            
+            p.nombre = request.POST["nombre"]
+            p.apellido = request.POST["apellido"]
+            p.correo = request.POST["correo"]
+            p.direccion = request.POST["direccion"]
+            p.documento = request.POST["documento"]
+            p.fecha_nacimiento = request.POST["fecha_nacimiento"]
+            p.marca_veh = request.POST["marca_veh"]
+            p.color_veh = request.POST["color_veh"]
+            p.documentacion_veh = request.POST["documentacion_veh"]
+
+            
+            p.save()
+            messages.success(request, "Producto actualizado correctamente!!")
+        else:
+            messages.warning(request, "Usted no ha enviado datos...")
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+    
+    return redirect('transportes:listarProveedores')
+
+
+def eliminarProveedores(request, id):
+    try:
+        p =  Proveedores.objects.get(pk = id)
+        p.delete()
+        messages.success(request, "Producto eliminado correctamente!!")
+    except IntegrityError:
+        messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
         messages.error(request, f"Error: {e}")
     

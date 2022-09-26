@@ -37,6 +37,8 @@
                     <th>marca_veh</th>
                     <th>color_veh</th>
                     <th>documentacion_veh</th>
+                    <th>Operaciones</th>
+
 
 
 
@@ -47,16 +49,23 @@
             <tbody>
                 {%for t in datosR %}
                 <tr>
-                    <th>{{t.id}}</th>
-                    <th>{{t.nombre}}</th>
-                    <th>{{t.apellido}}</th>
-                    <th>{{t.correo}}</th>
-                    <th>{{t.direccion}}</th>
-                    <th>{{t.documento}}</th>
-                    <th>{{t.fecha_nacimiento}}</th>
-                    <th>{{t.marca_veh}}</th>
-                    <th>{{t.color_veh}}</th>
-                    <th>{{t.documentacion_veh}}</th>
+                    <td>{{t.id}}</td>
+                    <td>{{t.nombre}}</td>
+                    <td>{{t.apellido}}</td>
+                    <td>{{t.correo}}</td>
+                    <td>{{t.direccion}}</td>
+                    <td>{{t.documento}}</td>
+                    <td>{{t.fecha_nacimiento}}</td>
+                    <td>{{t.marca_veh}}</td>
+                    <td>{{t.color_veh}}</td>
+                    <td>{{t.documentacion_veh}}</td>
+                    <td>
+                        <div class="d-grid gap-2 d-md-block">
+                            <a class="btn btn-dark" href="{% url 'transportes:eliminarProveedores' t.id %}">Eliminar</a>
+
+                            <a class="btn btn-info" href="{% url 'transportes:formularioEditarProveedores' t.id %}">Editar</a>
+                        </div>
+                    </td>
 
 
 

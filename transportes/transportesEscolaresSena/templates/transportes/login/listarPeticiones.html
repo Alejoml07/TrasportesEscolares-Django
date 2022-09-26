@@ -14,8 +14,7 @@
    
 
     {%block contenedor%}
-    <a class="btn btn-warning" href="{% url 'transportes:registrarPeticiones
-    ' %}">Agregar</a>
+    <a class="btn btn-warning" href="{% url 'transportes:registrarPeticiones' %}">Agregar</a>
     {% if messages %}
 
         {% for message in messages %}
@@ -35,6 +34,8 @@
                     <th>colegio</th>
                     <th>horario</th>
                     <th>Comentario adicional</th>
+                    <th>Operaciones</th>
+
 
 
 
@@ -43,13 +44,20 @@
             <tbody>
                 {%for t in datosP %}
                 <tr>
-                    <th>{{t.id}}</th>
-                    <th>{{t.cliente}}</th>
-                    <th>{{t.servicios}}</th>
-                    <th>{{t.direccion}}</th>
-                    <th>{{t.colegio}}</th>
-                    <th>{{t.horario}}</th>
-                    <th>{{t.comentario_add}}</th>
+                    <td>{{t.id}}</td>
+                    <td>{{t.cliente}}</td>
+                    <td>{{t.servicios}}</td>
+                    <td>{{t.direccion}}</td>
+                    <td>{{t.colegio}}</td>
+                    <td>{{t.horario}}</td>
+                    <td>{{t.comentario_add}}</td>
+                    <td>
+                        <div class="d-grid gap-2 d-md-block">
+                            <a class="btn btn-dark" href="{% url 'transportes:eliminarPeticiones' t.id %}">Eliminar</a>
+
+                            <a class="btn btn-info" href="{% url 'transportes:formularioEditarPeticiones' t.id %}">Editar</a>
+                        </div>
+                    </td>
 
 
                 </tr>

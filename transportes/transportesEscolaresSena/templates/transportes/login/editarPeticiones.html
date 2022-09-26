@@ -13,41 +13,42 @@
 <body>
     {%block contenedor%}
     <h3>Agregar Peticiones</h3>
-    <form action="{%url 'transportes:guardarPeticiones'%}" method="post">
+    <form action="{%url 'transportes:actualizarPeticiones'%}" method="post">
         {%csrf_token%}
+        <input type="hidden" name="id" value="{{ peticiones.id }}"/>
         <div class="mb-3 mt-3">
           <label>Cliente</label>
           <select class="form-control" name="cliente">
               <option value="">Seleccione:</option>
               {% for c in cli %}
-                  <option value="{{ c.id }}">{{ c.id}} - {{ c.nombre }}</option>
+                  <option value="{{ c.id }}"{% if peticiones.cliente.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
               {% endfor %}
           </select>
         </div>
         <div class="mb-3 mt-3">
-          <label>Servicios</label>
+          <label>servicios</label>
           <select class="form-control" name="servicios">
               <option value="">Seleccione:</option>
               {% for c in servicios %}
-                  <option value="{{ c.id }}">{{ c.id}} - {{ c.nombre }}</option>
+                  <option value="{{ c.id }}"{% if peticiones.servicios.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
               {% endfor %}
           </select>
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">direccion:</label>
-            <input type="text" class="form-control" id="email" placeholder="Ingrese direccion" name="direccion">
+            <input type="text" class="form-control" id="" value="{{ peticiones.direccion }}" name="direccion">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">colegio:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese colegio" name="colegio">
+            <input type="text" class="form-control" id="" value="{{ peticiones.colegio }}" name="colegio">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">horario:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese horario" name="horario">
+            <input type="text" class="form-control" id="" value="{{ peticiones.horario }}" name="horario">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Comentario adicional:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese Comentario adicional" name="comentario_add">
+            <input type="text" class="form-control" id="" value="{{ peticiones.comentario_add }}" name="comentario_add">
           </div>
           
         

@@ -41,14 +41,20 @@ urlpatterns = [
     path('formularioEditarServicios/<int:id>', views.formularioEditarServicios, name = "formularioEditarServicios"),
     path('actualizarServicios/', views.actualizarServicios, name = "actualizarServicios"),
     path('eliminarServicios/<int:id>', views.eliminarServicios, name = "eliminarServicios"),
-
-    #--------------------------Servicios-----------------------------------
+    #--------------------------Peticiones-----------------------------------
     path('listarPeticiones/', views.listarPeticiones, name = "listarPeticiones"),
     path('registrarPeticiones/', views.registrarPeticiones, name = "registrarPeticiones"),
     path('guardarPeticiones/', views.guardarPeticiones, name = "guardarPeticiones"),
+    path('formularioEditarPeticiones/<int:id>', views.formularioEditarPeticiones, name = "formularioEditarPeticiones"),
+    path('actualizarPeticiones/', views.actualizarPeticiones, name = "actualizarPeticiones"),
+    path('eliminarPeticiones/<int:id>', views.eliminarPeticiones, name = "eliminarPeticiones"),
+    #--------------------------Proveedores-----------------------------------
     path('listarProveedores/', views.listarProveedores, name = "listarProveedores"),
     path('registrarProveedores/', views.registrarProveedores, name = "registrarProveedores"),
     path('guardarProveedores/', views.guardarProveedores, name = "guardarProveedores"),
+    path('formularioEditarProveedores/<int:id>', views.formularioEditarProveedores, name = "formularioEditarProveedores"),
+    path('actualizarProveedores/', views.actualizarProveedores, name = "actualizarProveedores"),
+    path('eliminarProveedores/<int:id>', views.eliminarProveedores, name = "eliminarProveedores"),
    
    
 

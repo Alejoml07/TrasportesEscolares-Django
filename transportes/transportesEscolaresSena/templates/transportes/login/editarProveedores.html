@@ -13,43 +13,45 @@
 <body>
     {%block contenedor%}
     <h3>Agregar Proveedor</h3>
-    <form action="{%url 'transportes:guardarProveedores'%}" method="post">
+    <form action="{%url 'transportes:actualizarProveedores'%}" method="post">
         {%csrf_token%}
+        <input type="hidden" name="id" value="{{ proveedores.id }}"/>
+
         <div class="mb-3 mt-3">
           <label for="" class="form-label">Nombre:</label>
-          <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="nombre">
+          <input type="text" class="form-control" id="" value="{{ proveedores.nombre }}" name="nombre">
         </div>
         <div class="mb-3 mt-3">
             <label for="" class="form-label">Apellido:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese Apellido" name="apellido">
+            <input type="text" class="form-control" id="" value="{{ proveedores.apellido }}" name="apellido">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Correo:</label>
-            <input type="email" class="form-control" id="email" placeholder="Ingrese Correo" name="correo">
+            <input type="email" class="form-control" id="email" value="{{ proveedores.correo }}" name="correo">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Direccion:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese Direccion" name="direccion">
+            <input type="text" class="form-control" id="" value="{{ proveedores.direccion }}" name="direccion">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Documento:</label>
-            <input type="number" class="form-control" id="" placeholder="Ingrese Documento" name="documento">
+            <input type="number" class="form-control" id="" value="{{ proveedores.documento }}" name="documento">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Fecha de Nacimiento:</label>
-            <input type="date" class="form-control" id="" placeholder="Ingrese " name="fecha_nacimiento">
+            <input type="date" class="form-control" id="" value="{{ proveedores.fecha_nacimiento }}" name="fecha_nacimiento">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Marca del vehiculo:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese " name="marca_veh">
+            <input type="text" class="form-control" id="" value="{{ proveedores.marca_veh }}" name="marca_veh">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Color del vehiculo:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese " name="color_veh">
+            <input type="text" class="form-control" id="" value="{{ proveedores.color_veh }}" name="color_veh">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Documentacion del Vehiculo:</label>
-            <input type="checkbox" class="form-control" id="" placeholder="Ingrese " name="documentacion_veh">
+            <input type="text" class="" id="" value="" name="documentacion_veh">
           </div>
           
         
