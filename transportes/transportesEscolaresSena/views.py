@@ -8,7 +8,13 @@ from django.contrib import messages
 #Gestion de errores de base de datos 
 from django.db import IntegrityError
 
-from .models import Cliente,Beneficiarios,Comentarios,TiposdeServicios,Servicios,Peticiones,Proveedores
+from .models import Cliente,Beneficiarios,Comentarios,TiposdeServicios,Servicios,Peticiones,Proveedores, Vehiculo
+
+from django.db.models import Q
+
+from django.core.paginator import Paginator
+
+
 
 
 # Create your views here.
@@ -16,8 +22,43 @@ from .models import Cliente,Beneficiarios,Comentarios,TiposdeServicios,Servicios
 def index(request):
     return render(request, 'transportes/index.html')
 
+def loginFormulario(request):
+        return render(request, 'transportes/login/login.html')
+
+
+def login(request):
+    if request.method == "POST":
+        try:
+            user = request.POST["usuario"]
+            passw = request.POST["clave"]
+
+            q = Cliente.objects.get(usuario = user, clave = passw)
+            # crear la sesión
+            request.session["logueo"] = [q.nombre, q.apellido, q.rol, q.id, q.get_rol_display()]
+
+            messages.success(request, "Bienvenido!!")
+            return redirect('transportes:index')     
+
+        except Cliente.DoesNotExist:
+            messages.error(request, "Usuario o contraseña incorrectos...")
+            return redirect('transportes:loginFormulario')
+        except Exception as e:
+            messages.error(request, f"Error: {e}")
+            return redirect('transportes:loginFormulario')
+    else:
+        messages.warning(request, "Usted no ha enviado datos...")
+        return redirect('transportes:loginFormulario')
+
+def logout(request):
+    pass
+
 def listarUsuario(request):
     q = Cliente.objects.all()
+    paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+
+    page_number = request.GET.get('page')
+    #Sobreescribir la salida de la consulta.......
+    q = paginator.get_page(page_number)
     contexto = {'datos': q}
 
     return render(request, 'transportes/login/listarUsuario.html', contexto)
@@ -82,6 +123,24 @@ def eliminarUsuario(request, id):
         messages.error(request, f"Error: {e}")
     
     return redirect('transportes:listarUsuario')
+
+def buscarProducto(request):
+    
+    if request.method == "POST":
+        dato = request.POST["buscar"]
+        q = Cliente.objects.filter( Q(nombre__icontains = dato))
+        
+        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        q = paginator.get_page(page_number)
+        
+        contexto = { "datos": q }
+        return render(request, 'transportes/login/listar_Usuario_ajax.html', contexto)
+    else:
+        messages.error(request, "Error no envió datos...")
+        return redirect('transportes:listarUsuario')
     
 
 
@@ -90,6 +149,11 @@ def eliminarUsuario(request, id):
 
 def listarBeneficiario(request):
     b = Beneficiarios.objects.all()
+    paginator = Paginator(b, 3) # Mostrar 3 registros por página...
+
+    page_number = request.GET.get('page')
+    #Sobreescribir la salida de la consulta.......
+    b = paginator.get_page(page_number)
     contextob = {'datosB': b}
 
     return render(request, 'transportes/login/listarBeneficiario.html', contextob)
@@ -161,9 +225,32 @@ def eliminarBeneficiario(request, id):
     
     return redirect('transportes:listarBeneficiario')
 
+def buscarBeneficiario(request):
+    
+    if request.method == "POST":
+        dato = request.POST["buscar"]
+        q = Beneficiarios.objects.filter( Q(nombre__icontains = dato))
+        
+        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        q = paginator.get_page(page_number)
+        
+        contexto = { "datosB": q }
+        return render(request, 'transportes/login/listar_Beneficiario_ajax.html', contexto)
+    else:
+        messages.error(request, "Error no envió datos...")
+        return redirect('transportes:listarBeneficiario')
+
 #--------------------COMENTARIOS----------------------------------------
 def listarComentarios(request):
     c = Comentarios.objects.all()
+    paginator = Paginator(c, 3) # Mostrar 3 registros por página...
+
+    page_number = request.GET.get('page')
+    #Sobreescribir la salida de la consulta.......
+    c = paginator.get_page(page_number)
     contextoC = {'datosC': c}
 
     return render(request, 'transportes/login/listarComentarios.html', contextoC)
@@ -229,13 +316,36 @@ def eliminarComentarios(request, id):
     except Exception as e:
         messages.error(request, f"Error: {e}")
     
-    return redirect('transportes:listarBeneficiario')
+    return redirect('transportes:listarComentarios')
+
+def buscarComentarios(request):
+    
+    if request.method == "POST":
+        dato = request.POST["buscar"]
+        q = Comentarios.objects.filter( Q(tipo__icontains = dato))
+        
+        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        q = paginator.get_page(page_number)
+        
+        contexto = { "datosC": q }
+        return render(request, 'transportes/login/listar_Comentarios_ajax.html', contexto)
+    else:
+        messages.error(request, "Error no envió datos...")
+        return redirect('transportes:listarComentarios')
 
 #--------------------TIPOS DE SERVICIOS----------------------------------------
 
 
 def listarTiposdeServicios(request):
     t = TiposdeServicios.objects.all()
+    paginator = Paginator(t, 3) # Mostrar 3 registros por página...
+
+    page_number = request.GET.get('page')
+    #Sobreescribir la salida de la consulta.......
+    t = paginator.get_page(page_number)
     contextoT = {'datosT': t}
 
     return render(request, 'transportes/login/listarTiposdeServicios.html', contextoT)
@@ -295,10 +405,33 @@ def eliminarTiposdeServicios(request, id):
     
     return redirect('transportes:listarTiposdeServicios')
 
+def buscarTiposdeServicios(request):
+    
+    if request.method == "POST":
+        dato = request.POST["buscar"]
+        q = TiposdeServicios.objects.filter( Q(nombre__icontains = dato))
+        
+        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        q = paginator.get_page(page_number)
+        
+        contexto = { "datosT": q }
+        return render(request, 'transportes/login/listar_TiposdeServicios_ajax.html', contexto)
+    else:
+        messages.error(request, "Error no envió datos...")
+        return redirect('transportes:listarTiposdeServicios')
+
 #--------------------SERVICIOS----------------------------------------
 
 def listarServicios(request):
     s = Servicios.objects.all()
+    paginator = Paginator(s, 3) # Mostrar 3 registros por página...
+
+    page_number = request.GET.get('page')
+    #Sobreescribir la salida de la consulta.......
+    s = paginator.get_page(page_number)
     contextoS = {'datosS': s}
 
     return render(request, 'transportes/login/listarServicios.html', contextoS)
@@ -363,12 +496,36 @@ def eliminarServicios(request, id):
     except Exception as e:
         messages.error(request, f"Error: {e}")
     
-    return redirect('transportes:listarBeneficiario')
+    return redirect('transportes:listarServicios')
+
+def buscarServicios(request):
+    
+    if request.method == "POST":
+        dato = request.POST["buscar"]
+        q = Servicios.objects.filter( Q(nombre__icontains = dato))
+        
+        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        q = paginator.get_page(page_number)
+        
+        contexto = { "datosS": q }
+        return render(request, 'transportes/login/listar_Servicios_ajax.html', contexto)
+    else:
+        messages.error(request, "Error no envió datos...")
+        return redirect('transportes:listarServicios')
+
 
 
 #--------------------PETICIONES----------------------------------------
 def listarPeticiones(request):
     p = Peticiones.objects.all()
+    paginator = Paginator(p, 3) # Mostrar 3 registros por página...
+
+    page_number = request.GET.get('page')
+    #Sobreescribir la salida de la consulta.......
+    p = paginator.get_page(page_number)
     contextoP = {'datosP': p}
 
     return render(request, 'transportes/login/listarPeticiones.html', contextoP)
@@ -452,11 +609,34 @@ def eliminarPeticiones(request, id):
     
     return redirect('transportes:listarPeticiones')
 
+def buscarPeticiones(request):
+    
+    if request.method == "POST":
+        dato = request.POST["buscar"]
+        q = Peticiones.objects.filter( Q(colegio__icontains = dato ) |Q(direccion__icontains = dato ))
+        
+        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        q = paginator.get_page(page_number)
+        
+        contexto = { "datosP": q }
+        return render(request, 'transportes/login/listar_Peticiones_ajax.html', contexto)
+    else:
+        messages.error(request, "Error no envió datos...")
+        return redirect('transportes:listarPeticiones')
+
 
 #--------------------PROVEEDORES----------------------------------------
 
 def listarProveedores(request):
     r = Proveedores.objects.all()
+    paginator = Paginator(r, 3) # Mostrar 3 registros por página...
+
+    page_number = request.GET.get('page')
+    #Sobreescribir la salida de la consulta.......
+    r = paginator.get_page(page_number)
     contextoR = {'datosR': r}
 
     return render(request, 'transportes/login/listarProveedores.html', contextoR)
@@ -532,3 +712,120 @@ def eliminarProveedores(request, id):
         messages.error(request, f"Error: {e}")
     
     return redirect('transportes:listarProveedores')
+
+def buscarProveedores(request):
+    
+    if request.method == "POST":
+        dato = request.POST["buscar"]
+        q = Proveedores.objects.filter( Q(nombre__icontains = dato ) )
+        
+        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        q = paginator.get_page(page_number)
+        
+        contexto = { "datosR": q }
+        return render(request, 'transportes/login/listar_Proveedores_ajax.html', contexto)
+    else:
+        messages.error(request, "Error no envió datos...")
+        return redirect('transportes:listarProveedores')
+    
+#--------------------VEHICULOS----------------------------------------
+
+
+def listarVehiculo(request):
+    b = Vehiculo.objects.all()
+    paginator = Paginator(b, 3) # Mostrar 3 registros por página...
+
+    page_number = request.GET.get('page')
+    #Sobreescribir la salida de la consulta.......
+    v = paginator.get_page(page_number)
+    contextob = {'datosV': v}
+
+    return render(request, 'transportes/login/vehiculo/listarVehiculo.html', contextob)
+
+def registrarVehiculo(request):
+    u = Proveedores.objects.all()
+    contexto = {'proveedores': u}
+    return render(request, 'transportes/login/vehiculo/registrarVehiculo.html', contexto)
+
+def guardarVehiculo(request):
+    try:
+        if request.method == "POST":
+            u =  Proveedores.objects.get(pk = request.POST["cliente"])
+            q = Vehiculo(
+                proveedor = u,
+                placa = request.POST["placa"],
+                marca = request.POST["marca"],
+                color = request.POST["color"],
+                foto = request.POST["foto"])
+            q.save()
+
+            messages.success(request, "Trabajador guardado exitosamente")
+        else:
+            messages.warning(request, "No se han enviado datos...")
+
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+    
+    return redirect('transportes:listarVehiculo')
+
+def formularioEditarVehiculo(request, id):
+    p = Vehiculo.objects.get(pk = id)
+    c = Proveedores.objects.all()
+    contexto = { "vehiculo": p, "proveedores":c }
+    return render(request, 'transportes/login/vehiculo/editarVehiculo.html', contexto)
+
+
+def actualizarVehiculo(request):
+    try:
+        if request.method == "POST":
+            #Obtener la instancia de producto a modificar
+            p =  Vehiculo.objects.get(pk = request.POST["id"])
+            c =  Proveedores.objects.get(pk = request.POST["proveedor"])
+            p.proveedor = c
+            p.placa = request.POST["placa"]
+            p.marca = request.POST["marca"]
+            p.color = request.POST["color"]
+            p.foto = request.POST["foto"]
+
+            p.save()
+            messages.success(request, "Producto actualizado correctamente!!")
+        else:
+            messages.warning(request, "Usted no ha enviado datos...")
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+    
+    return redirect('transportes:listarVehiculo')
+
+
+def eliminarVehiculo(request, id):
+    try:
+        p =  Vehiculo.objects.get(pk = id)
+        p.delete()
+        messages.success(request, "Producto eliminado correctamente!!")
+    except IntegrityError:
+        messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+    
+    return redirect('transportes:listarVehiculo')
+
+def buscarVehiculo(request):
+    
+    if request.method == "POST":
+        dato = request.POST["buscar"]
+        q = Vehiculo.objects.filter( Q(nombre__icontains = dato))
+        
+        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        q = paginator.get_page(page_number)
+        
+        contexto = { "datosV": q }
+        return render(request, 'transportes/login/vehiculo/listar_Vehiculo_ajax.html', contexto)
+    else:
+        messages.error(request, "Error no envió datos...")
+        return redirect('transportes:listarVehiculo')

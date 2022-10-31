@@ -2,12 +2,12 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Cliente,Beneficiarios,Comentarios,TiposdeServicios,Servicios,Peticiones,Proveedores
+from .models import Cliente,Beneficiarios,Comentarios,TiposdeServicios,Servicios,Peticiones,Proveedores, Vehiculo
 
 # Register your models here.
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('id','nombre', 'apellido', 'correo', 'direccion', 'documento','fecha_nacimiento' ) 
+    list_display = ('id','nombre', 'apellido', 'correo', 'direccion', 'documento','fecha_nacimiento', 'usuario', 'clave', 'rol' ) 
     search_fields = ['id','nombre']
 
 @admin.register(Beneficiarios)
@@ -37,8 +37,13 @@ class PeticionesAdmin(admin.ModelAdmin):
 
 @admin.register(Proveedores)
 class ProveedoresAdmin(admin.ModelAdmin):
-    list_display =  ('id','nombre', 'apellido', 'correo', 'direccion', 'documento', 'fecha_nacimiento', 'marca_veh', 'color_veh', 'documentacion_veh', )
+    list_display =  ('id','nombre', 'apellido', 'correo', 'direccion', 'documento', 'fecha_nacimiento',)
     search_fields = ['id','nombre']
+
+@admin.register(Vehiculo)
+class VehiculoAdmin(admin.ModelAdmin):
+    list_display =  ('placa', 'marca', 'color', 'proveedor', 'foto', )
+    search_fields = ['placa','proveedor']
 
 
 

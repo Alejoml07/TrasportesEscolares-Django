@@ -10,6 +10,14 @@ class Cliente(models.Model):
     direccion = models.CharField(max_length= 100)
     documento = models.IntegerField()
     fecha_nacimiento = models.DateTimeField()
+    usuario = models.CharField(max_length=100, default = "u1")
+    clave = models.CharField(max_length=254, default = "12345")
+    ROLES = (
+        ('A', 'Administrador'),
+        ('S', 'Supervisor'),
+        ('O', 'Operario'),
+    )
+    rol = models.CharField(max_length=100, choices=ROLES, default='O')
 
 
     def __str__(self):
@@ -72,11 +80,19 @@ class Proveedores(models.Model):
     direccion = models.CharField(max_length= 100)
     documento = models.IntegerField()
     fecha_nacimiento = models.DateTimeField()
-    marca_veh = models.CharField(max_length= 100)
-    color_veh = models.CharField(max_length= 100)
-    documentacion_veh = models.BooleanField()
+    
     def __str__(self):
         return f" {self.nombre} "
 
+class Vehiculo (models.Model):
+    placa = models.CharField(max_length= 100)
+    marca = models.CharField(max_length= 100)
+    color = models.EmailField(max_length= 250)
+    proveedor = models.ForeignKey(Proveedores,on_delete = models.DO_NOTHING)
+    foto = models.IntegerField()
+    
+    
+    def __str__(self):
+        return f" {self.proveedor},{self.placa} "
 
 

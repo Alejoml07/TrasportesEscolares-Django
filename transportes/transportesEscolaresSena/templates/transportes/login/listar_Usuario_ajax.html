@@ -15,6 +15,7 @@
 
     {%block contenedor%}
     <h1>Listar Usuario</h1>
+
     <a class="btn btn-warning" href="{% url 'transportes:registrarUsuario' %}">Agregar</a>
     {% if messages %}
 
@@ -25,14 +26,13 @@
     {% endif %}
 
     {%if datos%}
-        <br>
-        <form class="d-flex" role="search" action="{% url 'transportes:buscarProducto' %}" method="post">
-            {% csrf_token %}
-            <input onkeyup="buscarProducto('{% url 'transportes:buscarProducto' %}');" class="form-control" type="search" name="buscar" id="buscar">
-
-        </form>
-        <div id="respuesta">
-
+            <br>
+            <form class="d-flex" role="search" action="{% url 'transportes:buscarProducto' %}" method="post">
+                {% csrf_token %}
+                <input onkeyup="buscarProducto('{% url 'transportes:buscarProducto' %}');" class="form-control" type="search" name="buscar" id="buscar">
+                
+            </form>
+            <div id="respuesta">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -75,7 +75,7 @@
             </tbody>
             
         </table>
-
+        
         <p>Página {{ datos.number }} de {{ datos.paginator.num_pages }}.</p>
         
         <nav aria-label="...">
