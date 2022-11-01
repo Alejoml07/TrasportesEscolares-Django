@@ -18,10 +18,10 @@
         <input type="hidden" name="id" value="{{ vehiculo.id }}"/>
         <div class="mb-3 mt-3">
             <label>Proveedor</label>
-            <select class="form-control" name="preveedor">
+            <select class="form-control" name="proveedor">
                 <option value="">Seleccione:</option>
-                {% for c in proveedor %}
-                    <option value="{{ c.id }}"{% if vehiculo.proveedores.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
+                {% for c in proveedores %}
+                    <option value="{{ c.id }}"{% if vehiculo.proveedor.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
                 {% endfor %}
             </select>
     

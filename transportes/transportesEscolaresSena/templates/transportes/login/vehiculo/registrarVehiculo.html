@@ -12,15 +12,15 @@
 </head>
 <body>
     {%block contenedor%}
-    <h3>Agregar Usuario</h3>
-    <form action="{%url 'transportes:guardarBeneficiario'%}" method="post">
+    <h3>Agregar Vehiculo</h3>
+    <form action="{%url 'transportes:guardarVehiculo'%}" method="post">
         {%csrf_token%}
 
         <div class="mb-3 mt-3">
           <label>Proveedor</label>
           <select class="form-control" name="proveedor">
               <option value="">Seleccione:</option>
-              {% for c in proveedor %}
+              {% for c in proveedores %}
                   <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
               {% endfor %}
           </select>
@@ -29,19 +29,19 @@
           <div class="mb-3 mt-3">
             
             <label for="" class="form-label">placa:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="placa">
+            <input type="text" class="form-control" id="" placeholder="Ingrese " name="placa">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">marca:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese Apellido" name="marca">
+            <input type="text" class="form-control" id="" placeholder="Ingrese " name="marca">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">color:</label>
-            <input type="text" class="form-control" id="" placeholder="Ingrese Documento" name="color">
+            <input type="text" class="form-control" id="" placeholder="Ingrese " name="color">
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">foto:</label>
-            <input type="date" class="form-control" id="" placeholder="Ingrese fecha de nacimiento" name="foto">
+            <input type="text" class="form-control" id="" placeholder="Ingrese fecha " name="foto">
           </div>
           
          

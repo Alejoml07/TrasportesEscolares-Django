@@ -15,8 +15,6 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 
 
-
-
 # Create your views here.
 
 def index(request):
@@ -61,10 +59,10 @@ def listarUsuario(request):
     q = paginator.get_page(page_number)
     contexto = {'datos': q}
 
-    return render(request, 'transportes/login/listarUsuario.html', contexto)
+    return render(request, 'transportes/login/usuarios/listarUsuario.html', contexto)
 
 def registrarUsuario(request):
-    return render(request, 'transportes/login/registrarUsuario.html')
+    return render(request, 'transportes/login/usuarios/registrarUsuario.html')
 
 def guardarUsuario(request):
     try:
@@ -72,7 +70,7 @@ def guardarUsuario(request):
             q = Cliente(nombre = request.POST["nombre"],apellido = request.POST["apellido"],correo = request.POST["correo"],direccion = request.POST["direccion"],documento = request.POST["documento"],fecha_nacimiento = request.POST["fecha_nacimiento"])
             q.save()
 
-            messages.success(request, "Trabajador guardado exitosamente")
+            messages.success(request, "Usuario guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
@@ -85,7 +83,7 @@ def guardarUsuario(request):
 def formularioEditar(request, id):
     p = Cliente.objects.get(pk = id)
     contexto = { "cliente": p }
-    return render(request, 'transportes/login/editarUsuario.html', contexto)
+    return render(request, 'transportes/login/usuarios/editarUsuario.html', contexto)
 
 
 def actualizarUsuario(request):
@@ -103,7 +101,7 @@ def actualizarUsuario(request):
 
             
             p.save()
-            messages.success(request, "Producto actualizado correctamente!!")
+            messages.success(request, "Usuario actualizado correctamente!!")
         else:
             messages.warning(request, "Usted no ha enviado datos...")
     except Exception as e:
@@ -116,7 +114,7 @@ def eliminarUsuario(request, id):
     try:
         p =  Cliente.objects.get(pk = id)
         p.delete()
-        messages.success(request, "Producto eliminado correctamente!!")
+        messages.success(request, "Usuario eliminado correctamente!!")
     except IntegrityError:
         messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
@@ -137,7 +135,7 @@ def buscarProducto(request):
         q = paginator.get_page(page_number)
         
         contexto = { "datos": q }
-        return render(request, 'transportes/login/listar_Usuario_ajax.html', contexto)
+        return render(request, 'transportes/login/usuarios/listar_Usuario_ajax.html', contexto)
     else:
         messages.error(request, "Error no envió datos...")
         return redirect('transportes:listarUsuario')
@@ -156,12 +154,12 @@ def listarBeneficiario(request):
     b = paginator.get_page(page_number)
     contextob = {'datosB': b}
 
-    return render(request, 'transportes/login/listarBeneficiario.html', contextob)
+    return render(request, 'transportes/login/beneficiarios/listarBeneficiario.html', contextob)
 
 def registrarBeneficiario(request):
     u = Cliente.objects.all()
     contexto = {'cli': u}
-    return render(request, 'transportes/login/registrarBeneficiario.html', contexto)
+    return render(request, 'transportes/login/beneficiarios/registrarBeneficiario.html', contexto)
 
 def guardarBeneficiario(request):
     try:
@@ -175,7 +173,7 @@ def guardarBeneficiario(request):
                 fecha_nacimiento = request.POST["fecha_nacimiento"])
             q.save()
 
-            messages.success(request, "Trabajador guardado exitosamente")
+            messages.success(request, "Beneficiario guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
@@ -188,7 +186,7 @@ def formularioEditarBeneficiario(request, id):
     p = Beneficiarios.objects.get(pk = id)
     c = Cliente.objects.all()
     contexto = { "beneficiario": p, "cli":c }
-    return render(request, 'transportes/login/editarBeneficiario.html', contexto)
+    return render(request, 'transportes/login/beneficiarios/editarBeneficiario.html', contexto)
 
 
 def actualizarBeneficiario(request):
@@ -204,7 +202,7 @@ def actualizarBeneficiario(request):
             p.fecha_nacimiento = request.POST["fecha_nacimiento"]
 
             p.save()
-            messages.success(request, "Producto actualizado correctamente!!")
+            messages.success(request, "Beneficiario actualizado correctamente!!")
         else:
             messages.warning(request, "Usted no ha enviado datos...")
     except Exception as e:
@@ -217,7 +215,7 @@ def eliminarBeneficiario(request, id):
     try:
         p =  Beneficiarios.objects.get(pk = id)
         p.delete()
-        messages.success(request, "Producto eliminado correctamente!!")
+        messages.success(request, "Beneficiario eliminado correctamente!!")
     except IntegrityError:
         messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
@@ -238,7 +236,7 @@ def buscarBeneficiario(request):
         q = paginator.get_page(page_number)
         
         contexto = { "datosB": q }
-        return render(request, 'transportes/login/listar_Beneficiario_ajax.html', contexto)
+        return render(request, 'transportes/login/beneficiarios/listar_Beneficiario_ajax.html', contexto)
     else:
         messages.error(request, "Error no envió datos...")
         return redirect('transportes:listarBeneficiario')
@@ -253,24 +251,28 @@ def listarComentarios(request):
     c = paginator.get_page(page_number)
     contextoC = {'datosC': c}
 
-    return render(request, 'transportes/login/listarComentarios.html', contextoC)
+    return render(request, 'transportes/login/comentarios/listarComentarios.html', contextoC)
 
 def registrarComentarios(request):
     u = Cliente.objects.all()
-    contexto = {'cli': u}
-    return render(request, 'transportes/login/registrarComentarios.html',contexto)
+    p = Proveedores.objects.all()
+    contexto = {'cli': u, 'proveedores':p}
+    return render(request, 'transportes/login/comentarios/registrarComentarios.html',contexto)
 
 def guardarComentarios(request):
     try:
         if request.method == "POST":
             u =  Cliente.objects.get(pk = request.POST["cliente"])
+            p =  Proveedores.objects.get(pk = request.POST["Proveedores"])
+
             q = Comentarios(
                 cliente = u,
+                proveedores = p,
                 tipo = request.POST["tipo"],
                 desc = request.POST["desc"])
             q.save()
 
-            messages.success(request, "Trabajador guardado exitosamente")
+            messages.success(request, "Comentario guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
@@ -283,7 +285,7 @@ def formularioEditarComentarios(request, id):
     p = Comentarios.objects.get(pk = id)
     c = Cliente.objects.all()
     contexto = { "beneficiario": p, "cli":c }
-    return render(request, 'transportes/login/editarComentario.html', contexto)
+    return render(request, 'transportes/login/comentarios/editarComentario.html', contexto)
 
 
 def actualizarComentarios(request):
@@ -297,7 +299,7 @@ def actualizarComentarios(request):
             p.desc = request.POST["desc"]
            
             p.save()
-            messages.success(request, "Producto actualizado correctamente!!")
+            messages.success(request, "Comentario actualizado correctamente!!")
         else:
             messages.warning(request, "Usted no ha enviado datos...")
     except Exception as e:
@@ -310,7 +312,7 @@ def eliminarComentarios(request, id):
     try:
         p = Comentarios.objects.get(pk = id)
         p.delete()
-        messages.success(request, "Producto eliminado correctamente!!")
+        messages.success(request, "Comentario eliminado correctamente!!")
     except IntegrityError:
         messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
@@ -331,7 +333,7 @@ def buscarComentarios(request):
         q = paginator.get_page(page_number)
         
         contexto = { "datosC": q }
-        return render(request, 'transportes/login/listar_Comentarios_ajax.html', contexto)
+        return render(request, 'transportes/login/comentarios/listar_Comentarios_ajax.html', contexto)
     else:
         messages.error(request, "Error no envió datos...")
         return redirect('transportes:listarComentarios')
@@ -348,10 +350,10 @@ def listarTiposdeServicios(request):
     t = paginator.get_page(page_number)
     contextoT = {'datosT': t}
 
-    return render(request, 'transportes/login/listarTiposdeServicios.html', contextoT)
+    return render(request, 'transportes/login/tipodeservicios/listarTiposdeServicios.html', contextoT)
 
 def registrarTiposdeServicios(request):
-    return render(request, 'transportes/login/registrarTiposdeServicios.html')
+    return render(request, 'transportes/login/tipodeservicios/registrarTiposdeServicios.html')
 
 def guardarTiposdeServicios(request):
     try:
@@ -359,7 +361,7 @@ def guardarTiposdeServicios(request):
             q = TiposdeServicios(nombre = request.POST["nombre"],caracteristicas = request.POST["caracteristicas"])
             q.save()
 
-            messages.success(request, "Trabajador guardado exitosamente")
+            messages.success(request, "Tipo de servicio guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
@@ -372,7 +374,7 @@ def guardarTiposdeServicios(request):
 def formularioEditarTiposdeServcios(request, id):
     p = TiposdeServicios.objects.get(pk = id)
     contexto = { "TipoServ": p }
-    return render(request, 'transportes/login/editarTiposdeServicios.html', contexto)
+    return render(request, 'transportes/login/tipodeservicios/editarTiposdeServicios.html', contexto)
 
 
 def actualizarTiposdeServicios(request):
@@ -384,7 +386,7 @@ def actualizarTiposdeServicios(request):
             p.nombre = request.POST["nombre"]
             p.tipo_serv = request.POST["tipo_serv"]
             p.save()
-            messages.success(request, "Producto actualizado correctamente!!")
+            messages.success(request, "Tipo de servicio actualizado correctamente!!")
         else:
             messages.warning(request, "Usted no ha enviado datos...")
     except Exception as e:
@@ -397,7 +399,7 @@ def eliminarTiposdeServicios(request, id):
     try:
         p = TiposdeServicios.objects.get(pk = id)
         p.delete()
-        messages.success(request, "Producto eliminado correctamente!!")
+        messages.success(request, "Tipo de servicio eliminado correctamente!!")
     except IntegrityError:
         messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
@@ -418,7 +420,7 @@ def buscarTiposdeServicios(request):
         q = paginator.get_page(page_number)
         
         contexto = { "datosT": q }
-        return render(request, 'transportes/login/listar_TiposdeServicios_ajax.html', contexto)
+        return render(request, 'transportes/login/tipodeservicios/listar_TiposdeServicios_ajax.html', contexto)
     else:
         messages.error(request, "Error no envió datos...")
         return redirect('transportes:listarTiposdeServicios')
@@ -434,12 +436,12 @@ def listarServicios(request):
     s = paginator.get_page(page_number)
     contextoS = {'datosS': s}
 
-    return render(request, 'transportes/login/listarServicios.html', contextoS)
+    return render(request, 'transportes/login/servicios/listarServicios.html', contextoS)
 
 def registrarServicios(request):
     u = TiposdeServicios.objects.all()
     contexto = {'TipoServ': u}
-    return render(request, 'transportes/login/registrarServicios.html',contexto)
+    return render(request, 'transportes/login/servicios/registrarServicios.html',contexto)
 
 def guardarServicios(request):
     try:
@@ -449,7 +451,7 @@ def guardarServicios(request):
             q = Servicios(nombre = request.POST["nombre"],tipo_serv = u)
             q.save()
 
-            messages.success(request, "Trabajador guardado exitosamente")
+            messages.success(request, "Servicio guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
@@ -463,7 +465,7 @@ def formularioEditarServicios(request, id):
     p = Servicios.objects.get(pk = id)
     c = TiposdeServicios.objects.all()
     contexto = { "servicios": p, "tipo_serv":c }
-    return render(request, 'transportes/login/editarServicios.html', contexto)
+    return render(request, 'transportes/login/servicios/editarServicios.html', contexto)
 
 
 def actualizarServicios(request):
@@ -477,7 +479,7 @@ def actualizarServicios(request):
            
 
             p.save()
-            messages.success(request, "Producto actualizado correctamente!!")
+            messages.success(request, "Servicio actualizado correctamente!!")
         else:
             messages.warning(request, "Usted no ha enviado datos...")
     except Exception as e:
@@ -490,7 +492,7 @@ def eliminarServicios(request, id):
     try:
         p =  Servicios.objects.get(pk = id)
         p.delete()
-        messages.success(request, "Producto eliminado correctamente!!")
+        messages.success(request, "Servicio eliminado correctamente!!")
     except IntegrityError:
         messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
@@ -511,7 +513,7 @@ def buscarServicios(request):
         q = paginator.get_page(page_number)
         
         contexto = { "datosS": q }
-        return render(request, 'transportes/login/listar_Servicios_ajax.html', contexto)
+        return render(request, 'transportes/login/servicios/listar_Servicios_ajax.html', contexto)
     else:
         messages.error(request, "Error no envió datos...")
         return redirect('transportes:listarServicios')
@@ -528,13 +530,13 @@ def listarPeticiones(request):
     p = paginator.get_page(page_number)
     contextoP = {'datosP': p}
 
-    return render(request, 'transportes/login/listarPeticiones.html', contextoP)
+    return render(request, 'transportes/login/peticiones/listarPeticiones.html', contextoP)
 
 def registrarPeticiones(request):
     c = Cliente.objects.all()
     s = Servicios.objects.all()
     contexto = {'cli':c,'servicios':s}
-    return render(request, 'transportes/login/registrarPeticiones.html',contexto)
+    return render(request, 'transportes/login/peticiones/registrarPeticiones.html',contexto)
 
 def guardarPeticiones(request):
     try:
@@ -552,7 +554,7 @@ def guardarPeticiones(request):
                 comentario_add = request.POST["comentario_add"])
             q.save()
 
-            messages.success(request, "Trabajador guardado exitosamente")
+            messages.success(request, "Peticion guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
@@ -567,7 +569,7 @@ def formularioEditarPeticiones(request, id):
     s = Servicios.objects.all()
     c = Cliente.objects.all()
     contexto = { "peticiones": p, "cli":c, 'servicios':s }
-    return render(request, 'transportes/login/editarPeticiones.html', contexto)
+    return render(request, 'transportes/login/peticiones/editarPeticiones.html', contexto)
 
 
 def actualizarPeticiones(request):
@@ -588,7 +590,7 @@ def actualizarPeticiones(request):
            
 
             p.save()
-            messages.success(request, "Producto actualizado correctamente!!")
+            messages.success(request, "Peticion actualizado correctamente!!")
         else:
             messages.warning(request, "Usted no ha enviado datos...")
     except Exception as e:
@@ -601,7 +603,7 @@ def eliminarPeticiones(request, id):
     try:
         p =  Peticiones.objects.get(pk = id)
         p.delete()
-        messages.success(request, "Producto eliminado correctamente!!")
+        messages.success(request, "Peticion eliminado correctamente!!")
     except IntegrityError:
         messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
@@ -622,7 +624,7 @@ def buscarPeticiones(request):
         q = paginator.get_page(page_number)
         
         contexto = { "datosP": q }
-        return render(request, 'transportes/login/listar_Peticiones_ajax.html', contexto)
+        return render(request, 'transportes/login/peticiones/listar_Peticiones_ajax.html', contexto)
     else:
         messages.error(request, "Error no envió datos...")
         return redirect('transportes:listarPeticiones')
@@ -639,10 +641,10 @@ def listarProveedores(request):
     r = paginator.get_page(page_number)
     contextoR = {'datosR': r}
 
-    return render(request, 'transportes/login/listarProveedores.html', contextoR)
+    return render(request, 'transportes/login/proveedores/listarProveedores.html', contextoR)
 
 def registrarProveedores(request):
-    return render(request, 'transportes/login/registrarProveedores.html')
+    return render(request, 'transportes/login/proveedores/registrarProveedores.html')
 
 def guardarProveedores(request):
     try:
@@ -659,7 +661,7 @@ def guardarProveedores(request):
                 documentacion_veh = request.POST["documentacion_veh"])
             q.save()
 
-            messages.success(request, "Trabajador guardado exitosamente")
+            messages.success(request, "Proveedor guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
@@ -671,7 +673,7 @@ def guardarProveedores(request):
 def formularioEditarProveedores(request, id):
     p = Proveedores.objects.get(pk = id)
     contexto = { "proveedores": p }
-    return render(request, 'transportes/login/editarProveedores.html', contexto)
+    return render(request, 'transportes/login/proveedores/editarProveedores.html', contexto)
 
 
 def actualizarProveedores(request):
@@ -692,7 +694,7 @@ def actualizarProveedores(request):
 
             
             p.save()
-            messages.success(request, "Producto actualizado correctamente!!")
+            messages.success(request, "Proveedor actualizado correctamente!!")
         else:
             messages.warning(request, "Usted no ha enviado datos...")
     except Exception as e:
@@ -705,7 +707,7 @@ def eliminarProveedores(request, id):
     try:
         p =  Proveedores.objects.get(pk = id)
         p.delete()
-        messages.success(request, "Producto eliminado correctamente!!")
+        messages.success(request, "Proveedor eliminado correctamente!!")
     except IntegrityError:
         messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
@@ -726,7 +728,7 @@ def buscarProveedores(request):
         q = paginator.get_page(page_number)
         
         contexto = { "datosR": q }
-        return render(request, 'transportes/login/listar_Proveedores_ajax.html', contexto)
+        return render(request, 'transportes/login/proveedores/listar_Proveedores_ajax.html', contexto)
     else:
         messages.error(request, "Error no envió datos...")
         return redirect('transportes:listarProveedores')
@@ -753,7 +755,7 @@ def registrarVehiculo(request):
 def guardarVehiculo(request):
     try:
         if request.method == "POST":
-            u =  Proveedores.objects.get(pk = request.POST["cliente"])
+            u = Proveedores.objects.get(pk = request.POST["proveedor"])
             q = Vehiculo(
                 proveedor = u,
                 placa = request.POST["placa"],
@@ -762,7 +764,7 @@ def guardarVehiculo(request):
                 foto = request.POST["foto"])
             q.save()
 
-            messages.success(request, "Trabajador guardado exitosamente")
+            messages.success(request, "Vehiculo guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
@@ -791,7 +793,7 @@ def actualizarVehiculo(request):
             p.foto = request.POST["foto"]
 
             p.save()
-            messages.success(request, "Producto actualizado correctamente!!")
+            messages.success(request, "Vehiculo actualizado correctamente!!")
         else:
             messages.warning(request, "Usted no ha enviado datos...")
     except Exception as e:
@@ -802,9 +804,9 @@ def actualizarVehiculo(request):
 
 def eliminarVehiculo(request, id):
     try:
-        p =  Vehiculo.objects.get(pk = id)
+        p =Vehiculo.objects.get(pk = id)
         p.delete()
-        messages.success(request, "Producto eliminado correctamente!!")
+        messages.success(request, "Vehiculo eliminado correctamente!!")
     except IntegrityError:
         messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
@@ -816,7 +818,7 @@ def buscarVehiculo(request):
     
     if request.method == "POST":
         dato = request.POST["buscar"]
-        q = Vehiculo.objects.filter( Q(nombre__icontains = dato))
+        q = Vehiculo.objects.filter( Q(id__icontains = dato))
         
         paginator = Paginator(q, 3) # Mostrar 3 registros por página...
 
