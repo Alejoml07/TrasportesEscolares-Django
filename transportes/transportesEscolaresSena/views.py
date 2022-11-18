@@ -48,7 +48,13 @@ def login(request):
         return redirect('transportes:loginFormulario')
 
 def logout(request):
-    pass
+    try:
+        del request.session["logueo"]
+        messages.success(request, "Sesión cerrada correctamente!!")
+        return redirect('transportes:index')
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+        return redirect('transportes:index')
 
 def listarUsuario(request):
     q = Cliente.objects.all()
