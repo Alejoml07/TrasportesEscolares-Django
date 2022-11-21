@@ -14,10 +14,10 @@ class Cliente(models.Model):
     clave = models.CharField(max_length=254, default = "12345")
     ROLES = (
         ('A', 'Administrador'),
-        ('S', 'Supervisor'),
-        ('O', 'Operario'),
+        ('C', 'Cliente'),
+        ('P', 'Proveedor'),
     )
-    rol = models.CharField(max_length=100, choices=ROLES, default='O')
+    rol = models.CharField(max_length=100, choices=ROLES, default='C')
 
 
     def __str__(self):
@@ -61,8 +61,6 @@ class TiposdeServicios (models.Model):
 
     def __str__(self):
         return f" {self.nombre} "
-
-
 
 class Servicios (models.Model):
     nombre = models.CharField(max_length= 100)

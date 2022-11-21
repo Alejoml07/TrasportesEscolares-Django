@@ -18,7 +18,12 @@ from django.core.paginator import Paginator
 # Create your views here.
 
 def index(request):
-    return render(request, 'transportes/index.html')
+    login = request.session.get('logueo', False)
+    if login:
+        return render(request, 'transportes/index.html')
+    else:
+        messages.warning(request, "Inicie sesión primero...")
+        return redirect('transportes:loginFormulario')
 
 def loginFormulario(request):
         return render(request, 'transportes/login/login.html')
@@ -57,15 +62,25 @@ def logout(request):
         return redirect('transportes:index')
 
 def listarUsuario(request):
-    q = Cliente.objects.all()
-    paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+     #Obtener la sesión
+    login = request.session.get('logueo', False)
 
-    page_number = request.GET.get('page')
-    #Sobreescribir la salida de la consulta.......
-    q = paginator.get_page(page_number)
-    contexto = {'datos': q}
+    if login and (login[2] == "A" or login[2] == "C"):
+        q = Cliente.objects.all()
+        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        q = paginator.get_page(page_number)
+        contexto = {'datos': q}
+        return render(request, 'transportes/login/usuarios/listarUsuario.html', contexto)
+    else:
+        if login and (login[2] != "A" and login[2] != "C"):
+            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
+            return redirect('transportes:index')
+        else:
+            messages.warning(request, "Inicie sesión primero...")
+            return redirect('transportes:loginFormulario')
 
-    return render(request, 'transportes/login/usuarios/listarUsuario.html', contexto)
 
 def registrarUsuario(request):
     return render(request, 'transportes/login/usuarios/registrarUsuario.html')
@@ -152,15 +167,25 @@ def buscarProducto(request):
 
 
 def listarBeneficiario(request):
-    b = Beneficiarios.objects.all()
-    paginator = Paginator(b, 3) # Mostrar 3 registros por página...
+    login = request.session.get('logueo', False)
 
-    page_number = request.GET.get('page')
-    #Sobreescribir la salida de la consulta.......
-    b = paginator.get_page(page_number)
-    contextob = {'datosB': b}
+    if login and (login[2] == "A" or login[2] == "C"):
+        b = Beneficiarios.objects.all()
+        paginator = Paginator(b, 3) # Mostrar 3 registros por página...
 
-    return render(request, 'transportes/login/beneficiarios/listarBeneficiario.html', contextob)
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        b = paginator.get_page(page_number)
+        contextob = {'datosB': b}
+
+        return render(request, 'transportes/login/beneficiarios/listarBeneficiario.html', contextob)
+    else:
+        if login and (login[2] != "A" and login[2] != "C"):
+            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
+            return redirect('transportes:index')
+        else:
+            messages.warning(request, "Inicie sesión primero...")
+            return redirect('transportes:loginFormulario')
 
 def registrarBeneficiario(request):
     u = Cliente.objects.all()
@@ -249,15 +274,21 @@ def buscarBeneficiario(request):
 
 #--------------------COMENTARIOS----------------------------------------
 def listarComentarios(request):
-    c = Comentarios.objects.all()
-    paginator = Paginator(c, 3) # Mostrar 3 registros por página...
+    login = request.session.get('logueo', False)
 
-    page_number = request.GET.get('page')
-    #Sobreescribir la salida de la consulta.......
-    c = paginator.get_page(page_number)
-    contextoC = {'datosC': c}
+    if login:
+        c = Comentarios.objects.all()
+        paginator = Paginator(c, 3) # Mostrar 3 registros por página...
 
-    return render(request, 'transportes/login/comentarios/listarComentarios.html', contextoC)
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        c = paginator.get_page(page_number)
+        contextoC = {'datosC': c}
+
+        return render(request, 'transportes/login/comentarios/listarComentarios.html', contextoC)
+    else:
+        messages.warning(request, "Inicie sesión primero...")
+        return redirect('transportes:loginFormulario')
 
 def registrarComentarios(request):
     u = Cliente.objects.all()
@@ -434,15 +465,20 @@ def buscarTiposdeServicios(request):
 #--------------------SERVICIOS----------------------------------------
 
 def listarServicios(request):
-    s = Servicios.objects.all()
-    paginator = Paginator(s, 3) # Mostrar 3 registros por página...
+    login = request.session.get('logueo', False)
+    if login:
+        s = Servicios.objects.all()
+        paginator = Paginator(s, 3) # Mostrar 3 registros por página...
 
-    page_number = request.GET.get('page')
-    #Sobreescribir la salida de la consulta.......
-    s = paginator.get_page(page_number)
-    contextoS = {'datosS': s}
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        s = paginator.get_page(page_number)
+        contextoS = {'datosS': s}
 
-    return render(request, 'transportes/login/servicios/listarServicios.html', contextoS)
+        return render(request, 'transportes/login/servicios/listarServicios.html', contextoS)
+    else:
+        messages.warning(request, "Inicie sesión primero...")
+        return redirect('transportes:loginFormulario')
 
 def registrarServicios(request):
     u = TiposdeServicios.objects.all()
@@ -528,15 +564,25 @@ def buscarServicios(request):
 
 #--------------------PETICIONES----------------------------------------
 def listarPeticiones(request):
-    p = Peticiones.objects.all()
-    paginator = Paginator(p, 3) # Mostrar 3 registros por página...
+    login = request.session.get('logueo', False)
 
-    page_number = request.GET.get('page')
-    #Sobreescribir la salida de la consulta.......
-    p = paginator.get_page(page_number)
-    contextoP = {'datosP': p}
+    if login and (login[2] == "A" or login[2] == "C"):
+        p = Peticiones.objects.all()
+        paginator = Paginator(p, 3) # Mostrar 3 registros por página...
 
-    return render(request, 'transportes/login/peticiones/listarPeticiones.html', contextoP)
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        p = paginator.get_page(page_number)
+        contextoP = {'datosP': p}
+
+        return render(request, 'transportes/login/peticiones/listarPeticiones.html', contextoP)
+    else:
+        if login and (login[2] != "A" and login[2] != "C"):
+            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
+            return redirect('transportes:index')
+        else:
+            messages.warning(request, "Inicie sesión primero...")
+            return redirect('transportes:loginFormulario')
 
 def registrarPeticiones(request):
     c = Cliente.objects.all()
@@ -639,15 +685,26 @@ def buscarPeticiones(request):
 #--------------------PROVEEDORES----------------------------------------
 
 def listarProveedores(request):
-    r = Proveedores.objects.all()
-    paginator = Paginator(r, 3) # Mostrar 3 registros por página...
+    login = request.session.get('logueo', False)
 
-    page_number = request.GET.get('page')
-    #Sobreescribir la salida de la consulta.......
-    r = paginator.get_page(page_number)
-    contextoR = {'datosR': r}
+    if login and (login[2] == "A" or login[2] == "P"):
+        r = Proveedores.objects.all()
+        paginator = Paginator(r, 3) # Mostrar 3 registros por página...
 
-    return render(request, 'transportes/login/proveedores/listarProveedores.html', contextoR)
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        r = paginator.get_page(page_number)
+        contextoR = {'datosR': r}
+
+        return render(request, 'transportes/login/proveedores/listarProveedores.html', contextoR)
+    else:
+        if login and (login[2] != "A" and login[2] != "P"):
+            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
+            return redirect('transportes:index')
+        else:
+            messages.warning(request, "Inicie sesión primero...")
+            return redirect('transportes:loginFormulario')
+
 
 def registrarProveedores(request):
     return render(request, 'transportes/login/proveedores/registrarProveedores.html')
@@ -743,15 +800,26 @@ def buscarProveedores(request):
 
 
 def listarVehiculo(request):
-    b = Vehiculo.objects.all()
-    paginator = Paginator(b, 3) # Mostrar 3 registros por página...
+    login = request.session.get('logueo', False)
 
-    page_number = request.GET.get('page')
-    #Sobreescribir la salida de la consulta.......
-    v = paginator.get_page(page_number)
-    contextob = {'datosV': v}
+    if login and (login[2] == "A" or login[2] == "P"):
+        b = Vehiculo.objects.all()
+        paginator = Paginator(b, 3) # Mostrar 3 registros por página...
 
-    return render(request, 'transportes/login/vehiculo/listarVehiculo.html', contextob)
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        v = paginator.get_page(page_number)
+        contextob = {'datosV': v}
+
+        return render(request, 'transportes/login/vehiculo/listarVehiculo.html', contextob)
+    else:
+        if login and (login[2] != "A" and login[2] != "P"):
+            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
+            return redirect('transportes:index')
+        else:
+            messages.warning(request, "Inicie sesión primero...")
+            return redirect('transportes:loginFormulario')
+
 
 def registrarVehiculo(request):
     u = Proveedores.objects.all()
