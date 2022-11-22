@@ -54,15 +54,6 @@ urlpatterns = [
     path('eliminarPeticiones/<int:id>', views.eliminarPeticiones, name = "eliminarPeticiones"),
     path('buscarPeticiones/', views.buscarPeticiones, name="buscarPeticiones"),
 
-    #--------------------------Proveedores-----------------------------------
-    path('listarProveedores/', views.listarProveedores, name = "listarProveedores"),
-    path('registrarProveedores/', views.registrarProveedores, name = "registrarProveedores"),
-    path('guardarProveedores/', views.guardarProveedores, name = "guardarProveedores"),
-    path('formularioEditarProveedores/<int:id>', views.formularioEditarProveedores, name = "formularioEditarProveedores"),
-    path('actualizarProveedores/', views.actualizarProveedores, name = "actualizarProveedores"),
-    path('eliminarProveedores/<int:id>', views.eliminarProveedores, name = "eliminarProveedores"),
-    path('buscarProveedores/', views.buscarProveedores, name="buscarProveedores"),
-
     #--------------------------Vehiculo-----------------------------------
     path('listarVehiculo/', views.listarVehiculo, name = "listarVehiculo"),
     path('registrarVehiculo/', views.registrarVehiculo, name = "registrarVehiculo"),

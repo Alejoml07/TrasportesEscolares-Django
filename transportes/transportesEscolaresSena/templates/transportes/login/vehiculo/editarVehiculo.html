@@ -17,11 +17,11 @@
         {%csrf_token%}
         <input type="hidden" name="id" value="{{ vehiculo.id }}"/>
         <div class="mb-3 mt-3">
-            <label>Proveedor</label>
-            <select class="form-control" name="proveedor">
+            <label>Cliente</label>
+            <select class="form-control" name="cliente">
                 <option value="">Seleccione:</option>
-                {% for c in proveedores %}
-                    <option value="{{ c.id }}"{% if vehiculo.proveedor.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
+                {% for c in cliente %}
+                    <option value="{{ c.id }}"{% if vehiculo.cliente.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
                 {% endfor %}
             </select>
     

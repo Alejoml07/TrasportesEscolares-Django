@@ -32,22 +32,10 @@ class Beneficiarios (models.Model):
 
     def __str__(self):
         return f" {self.nombre} "
-    
-class Proveedores(models.Model):
-    nombre = models.CharField(max_length= 100)
-    apellido = models.CharField(max_length= 100)
-    correo = models.EmailField(max_length= 250, null=True, blank=True)
-    direccion = models.CharField(max_length= 100)
-    documento = models.IntegerField()
-    fecha_nacimiento = models.DateTimeField()
-    
-    def __str__(self):
-        return f" {self.nombre} "
 
 
 class Comentarios (models.Model):
     cliente = models.ForeignKey(Cliente,on_delete = models.DO_NOTHING)
-    proveedores = models.ForeignKey(Proveedores,on_delete = models.DO_NOTHING)
     tipo = models.CharField(max_length= 100)
     desc = models.CharField(max_length= 1000)
 
@@ -79,7 +67,7 @@ class Vehiculo (models.Model):
     placa = models.CharField(max_length= 100)
     marca = models.CharField(max_length= 100)
     color = models.CharField(max_length= 250)
-    proveedor = models.ForeignKey(Proveedores,on_delete = models.DO_NOTHING)
+    cliente = models.ForeignKey(Cliente,on_delete = models.DO_NOTHING)
     foto = models.ImageField(upload_to = 'transportes/fotos', default='transportes/fotos/default.webp')
     
     

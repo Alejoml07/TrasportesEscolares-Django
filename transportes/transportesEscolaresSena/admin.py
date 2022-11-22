@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Cliente,Beneficiarios,Comentarios,Servicios,Peticiones,Proveedores, Vehiculo
+from .models import Cliente,Beneficiarios,Comentarios,Servicios,Peticiones,Vehiculo
 
 # Register your models here.
 @admin.register(Cliente)
@@ -30,14 +30,10 @@ class PeticionesAdmin(admin.ModelAdmin):
     list_display =  ('id','cliente', 'servicios',  'direccion', 'colegio', 'horario', 'comentario_add', )
     search_fields = ['id','cliente', 'servicios', ]
 
-@admin.register(Proveedores)
-class ProveedoresAdmin(admin.ModelAdmin):
-    list_display =  ('id','nombre', 'apellido', 'correo', 'direccion', 'documento', 'fecha_nacimiento',)
-    search_fields = ['id','nombre']
 
 @admin.register(Vehiculo)
 class VehiculoAdmin(admin.ModelAdmin):
-    list_display =  ('placa', 'marca', 'color', 'proveedor', 'foto', 'verFoto' )
+    list_display =  ('placa', 'marca', 'color', 'cliente', 'foto', 'verFoto' )
     search_fields = ['placa','proveedor']
     
     def verFoto(self, obj):

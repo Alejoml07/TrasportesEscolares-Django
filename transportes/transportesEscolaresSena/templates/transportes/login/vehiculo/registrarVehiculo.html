@@ -17,10 +17,10 @@
         {%csrf_token%}
 
         <div class="mb-3 mt-3">
-          <label>Proveedor</label>
-          <select class="form-control" name="proveedor">
+          <label>Cliente</label>
+          <select class="form-control" name="cliente">
               <option value="">Seleccione:</option>
-              {% for c in proveedores %}
+              {% for c in cliente %}
                   <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
               {% endfor %}
           </select>

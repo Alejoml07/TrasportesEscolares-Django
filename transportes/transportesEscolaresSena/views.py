@@ -8,7 +8,7 @@ from django.contrib import messages
 #Gestion de errores de base de datos 
 from django.db import IntegrityError
 
-from .models import Cliente,Beneficiarios,Comentarios,Servicios,Peticiones,Proveedores, Vehiculo
+from .models import Cliente,Beneficiarios,Comentarios,Servicios,Peticiones, Vehiculo
 
 from django.db.models import Q
 
@@ -308,19 +308,16 @@ def listarComentarios(request):
 
 def registrarComentarios(request):
     u = Cliente.objects.all()
-    p = Proveedores.objects.all()
-    contexto = {'cli': u, 'proveedores':p}
+    contexto = {'cli': u,}
     return render(request, 'transportes/login/comentarios/registrarComentarios.html',contexto)
 
 def guardarComentarios(request):
     try:
         if request.method == "POST":
             u =  Cliente.objects.get(pk = request.POST["cliente"])
-            p =  Proveedores.objects.get(pk = request.POST["Proveedores"])
 
             q = Comentarios(
                 cliente = u,
-                proveedores = p,
                 tipo = request.POST["tipo"],
                 desc = request.POST["desc"])
             q.save()
@@ -598,120 +595,6 @@ def buscarPeticiones(request):
         messages.error(request, "Error no envió datos...")
         return redirect('transportes:listarPeticiones')
 
-
-#--------------------PROVEEDORES----------------------------------------
-
-def listarProveedores(request):
-    login = request.session.get('logueo', False)
-
-    if login and (login[2] == "A" or login[2] == "P"):
-        r = Proveedores.objects.all()
-        paginator = Paginator(r, 3) # Mostrar 3 registros por página...
-
-        page_number = request.GET.get('page')
-        #Sobreescribir la salida de la consulta.......
-        r = paginator.get_page(page_number)
-        contextoR = {'datosR': r}
-
-        return render(request, 'transportes/login/proveedores/listarProveedores.html', contextoR)
-    else:
-        if login and (login[2] != "A" and login[2] != "P"):
-            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
-            return redirect('transportes:index')
-        else:
-            messages.warning(request, "Inicie sesión primero...")
-            return redirect('transportes:loginFormulario')
-
-
-def registrarProveedores(request):
-    return render(request, 'transportes/login/proveedores/registrarProveedores.html')
-
-def guardarProveedores(request):
-    try:
-        if request.method == "POST":
-            q = Proveedores(
-                nombre = request.POST["nombre"],
-                apellido = request.POST["apellido"],
-                correo = request.POST["correo"],
-                direccion = request.POST["direccion"],
-                documento = request.POST["documento"],
-                fecha_nacimiento = request.POST["fecha_nacimiento"],
-                marca_veh = request.POST["marca_veh"],
-                color_veh = request.POST["color_veh"],
-                documentacion_veh = request.POST["documentacion_veh"])
-            q.save()
-
-            messages.success(request, "Proveedor guardado exitosamente")
-        else:
-            messages.warning(request, "No se han enviado datos...")
-
-    except Exception as e:
-        messages.error(request, f"Error: {e}")
-    
-    return redirect('transportes:listarProveedores')
-
-def formularioEditarProveedores(request, id):
-    p = Proveedores.objects.get(pk = id)
-    contexto = { "proveedores": p }
-    return render(request, 'transportes/login/proveedores/editarProveedores.html', contexto)
-
-
-def actualizarProveedores(request):
-    try:
-        if request.method == "POST":
-            #Obtener la instancia de producto a modificar
-            p =  Proveedores.objects.get(pk = request.POST["id"])
-            
-            p.nombre = request.POST["nombre"]
-            p.apellido = request.POST["apellido"]
-            p.correo = request.POST["correo"]
-            p.direccion = request.POST["direccion"]
-            p.documento = request.POST["documento"]
-            p.fecha_nacimiento = request.POST["fecha_nacimiento"]
-            p.marca_veh = request.POST["marca_veh"]
-            p.color_veh = request.POST["color_veh"]
-            p.documentacion_veh = request.POST["documentacion_veh"]
-
-            
-            p.save()
-            messages.success(request, "Proveedor actualizado correctamente!!")
-        else:
-            messages.warning(request, "Usted no ha enviado datos...")
-    except Exception as e:
-        messages.error(request, f"Error: {e}")
-    
-    return redirect('transportes:listarProveedores')
-
-
-def eliminarProveedores(request, id):
-    try:
-        p =  Proveedores.objects.get(pk = id)
-        p.delete()
-        messages.success(request, "Proveedor eliminado correctamente!!")
-    except IntegrityError:
-        messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
-    except Exception as e:
-        messages.error(request, f"Error: {e}")
-    
-    return redirect('transportes:listarProveedores')
-
-def buscarProveedores(request):
-    
-    if request.method == "POST":
-        dato = request.POST["buscar"]
-        q = Proveedores.objects.filter( Q(nombre__icontains = dato ) )
-        
-        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
-
-        page_number = request.GET.get('page')
-        #Sobreescribir la salida de la consulta.......
-        q = paginator.get_page(page_number)
-        
-        contexto = { "datosR": q }
-        return render(request, 'transportes/login/proveedores/listar_Proveedores_ajax.html', contexto)
-    else:
-        messages.error(request, "Error no envió datos...")
-        return redirect('transportes:listarProveedores')
     
 #--------------------VEHICULOS----------------------------------------
 
@@ -739,8 +622,8 @@ def listarVehiculo(request):
 
 
 def registrarVehiculo(request):
-    u = Proveedores.objects.all()
-    contexto = {'proveedores': u}
+    u = Cliente.objects.all()
+    contexto = {'cliente': u}
     return render(request, 'transportes/login/vehiculo/registrarVehiculo.html', contexto)
 
 def guardarVehiculo(request):
@@ -754,7 +637,7 @@ def guardarVehiculo(request):
             else:
                 file = 'transportes/fotos/default.webp'
                 
-            u = Proveedores.objects.get(pk = request.POST["proveedor"])
+            u = Cliente.objects.get(pk = request.POST["cliente"])
             q = Vehiculo(
                 proveedor = u,
                 placa = request.POST["placa"],
@@ -774,8 +657,8 @@ def guardarVehiculo(request):
 
 def formularioEditarVehiculo(request, id):
     p = Vehiculo.objects.get(pk = id)
-    c = Proveedores.objects.all()
-    contexto = { "vehiculo": p, "proveedores":c }
+    c = Cliente.objects.all()
+    contexto = { "vehiculo": p, "cliente":c }
     return render(request, 'transportes/login/vehiculo/editarVehiculo.html', contexto)
 
 
@@ -784,8 +667,8 @@ def actualizarVehiculo(request):
         if request.method == "POST":
             #Obtener la instancia de producto a modificar
             p =  Vehiculo.objects.get(pk = request.POST["id"])
-            c =  Proveedores.objects.get(pk = request.POST["proveedor"])
-            p.proveedor = c
+            c =  Cliente.objects.get(pk = request.POST["cliente"])
+            p.cliente = c
             p.placa = request.POST["placa"]
             p.marca = request.POST["marca"]
             p.color = request.POST["color"]
