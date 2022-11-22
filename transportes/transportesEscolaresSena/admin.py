@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Cliente,Beneficiarios,Comentarios,TiposdeServicios,Servicios,Peticiones,Proveedores, Vehiculo
+from .models import Cliente,Beneficiarios,Comentarios,Servicios,Peticiones,Proveedores, Vehiculo
 
 # Register your models here.
 @admin.register(Cliente)
@@ -20,14 +20,9 @@ class ComentariosAdmin(admin.ModelAdmin):
     list_display = ('id','cliente', 'tipo', 'desc', )
     search_fields = ['cliente','id']
 
-@admin.register(TiposdeServicios)
-class TipoSetviciosAdmin(admin.ModelAdmin):
-    list_display = ('id','nombre', 'caracteristicas', )
-    search_fields = ['nombre','id']
-
 @admin.register(Servicios)
-class ServiciosAdmin(admin.ModelAdmin):
-    list_display =  ('id','nombre', 'tipo_serv', )
+class SetviciosAdmin(admin.ModelAdmin):
+    list_display = ('id','nombre', 'caracteristicas', )
     search_fields = ['nombre','id']
 
 @admin.register(Peticiones)
@@ -42,8 +37,12 @@ class ProveedoresAdmin(admin.ModelAdmin):
 
 @admin.register(Vehiculo)
 class VehiculoAdmin(admin.ModelAdmin):
-    list_display =  ('placa', 'marca', 'color', 'proveedor', 'foto', )
+    list_display =  ('placa', 'marca', 'color', 'proveedor', 'foto', 'verFoto' )
     search_fields = ['placa','proveedor']
+    
+    def verFoto(self, obj):
+        from django.utils.html import format_html
+        return format_html('<img src="{}" width="20%" />'.format(obj.foto.url))
 
 
 

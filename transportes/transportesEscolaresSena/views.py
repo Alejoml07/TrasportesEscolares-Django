@@ -8,11 +8,19 @@ from django.contrib import messages
 #Gestion de errores de base de datos 
 from django.db import IntegrityError
 
-from .models import Cliente,Beneficiarios,Comentarios,TiposdeServicios,Servicios,Peticiones,Proveedores, Vehiculo
+from .models import Cliente,Beneficiarios,Comentarios,Servicios,Peticiones,Proveedores, Vehiculo
 
 from django.db.models import Q
 
 from django.core.paginator import Paginator
+
+from django.core.files.storage import FileSystemStorage
+
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+from os import remove, path
+
 
 
 # Create your views here.
@@ -60,7 +68,7 @@ def logout(request):
     except Exception as e:
         messages.error(request, f"Error: {e}")
         return redirect('transportes:index')
-
+#--------------------------USUARIOS-----------------------------------------------------
 def listarUsuario(request):
      #Obtener la sesión
     login = request.session.get('logueo', False)
@@ -88,7 +96,15 @@ def registrarUsuario(request):
 def guardarUsuario(request):
     try:
         if request.method == "POST":
-            q = Cliente(nombre = request.POST["nombre"],apellido = request.POST["apellido"],correo = request.POST["correo"],direccion = request.POST["direccion"],documento = request.POST["documento"],fecha_nacimiento = request.POST["fecha_nacimiento"])
+            
+            
+                
+            q = Cliente(nombre = request.POST["nombre"],
+                        apellido = request.POST["apellido"],
+                        correo = request.POST["correo"],
+                        direccion = request.POST["direccion"],
+                        documento = request.POST["documento"],
+                        fecha_nacimiento = request.POST["fecha_nacimiento"])
             q.save()
 
             messages.success(request, "Usuario guardado exitosamente")
@@ -375,11 +391,10 @@ def buscarComentarios(request):
         messages.error(request, "Error no envió datos...")
         return redirect('transportes:listarComentarios')
 
-#--------------------TIPOS DE SERVICIOS----------------------------------------
+#--------------------SERVICIOS----------------------------------------
 
-
-def listarTiposdeServicios(request):
-    t = TiposdeServicios.objects.all()
+def listarServicios(request):
+    t = Servicios.objects.all()
     paginator = Paginator(t, 3) # Mostrar 3 registros por página...
 
     page_number = request.GET.get('page')
@@ -387,113 +402,18 @@ def listarTiposdeServicios(request):
     t = paginator.get_page(page_number)
     contextoT = {'datosT': t}
 
-    return render(request, 'transportes/login/tipodeservicios/listarTiposdeServicios.html', contextoT)
-
-def registrarTiposdeServicios(request):
-    return render(request, 'transportes/login/tipodeservicios/registrarTiposdeServicios.html')
-
-def guardarTiposdeServicios(request):
-    try:
-        if request.method == "POST":
-            q = TiposdeServicios(nombre = request.POST["nombre"],caracteristicas = request.POST["caracteristicas"])
-            q.save()
-
-            messages.success(request, "Tipo de servicio guardado exitosamente")
-        else:
-            messages.warning(request, "No se han enviado datos...")
-
-    except Exception as e:
-        messages.error(request, f"Error: {e}")
-    
-    return redirect('transportes:listarTiposdeServicios')
-
-
-def formularioEditarTiposdeServcios(request, id):
-    p = TiposdeServicios.objects.get(pk = id)
-    contexto = { "TipoServ": p }
-    return render(request, 'transportes/login/tipodeservicios/editarTiposdeServicios.html', contexto)
-
-
-def actualizarTiposdeServicios(request):
-    try:
-        if request.method == "POST":
-            #Obtener la instancia de producto a modificar
-            p =  TiposdeServicios.objects.get(pk = request.POST["id"])
-            
-            p.nombre = request.POST["nombre"]
-            p.tipo_serv = request.POST["tipo_serv"]
-            p.save()
-            messages.success(request, "Tipo de servicio actualizado correctamente!!")
-        else:
-            messages.warning(request, "Usted no ha enviado datos...")
-    except Exception as e:
-        messages.error(request, f"Error: {e}")
-    
-    return redirect('transportes:listarTiposdeServicios')
-
-
-def eliminarTiposdeServicios(request, id):
-    try:
-        p = TiposdeServicios.objects.get(pk = id)
-        p.delete()
-        messages.success(request, "Tipo de servicio eliminado correctamente!!")
-    except IntegrityError:
-        messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
-    except Exception as e:
-        messages.error(request, f"Error: {e}")
-    
-    return redirect('transportes:listarTiposdeServicios')
-
-def buscarTiposdeServicios(request):
-    
-    if request.method == "POST":
-        dato = request.POST["buscar"]
-        q = TiposdeServicios.objects.filter( Q(nombre__icontains = dato))
-        
-        paginator = Paginator(q, 3) # Mostrar 3 registros por página...
-
-        page_number = request.GET.get('page')
-        #Sobreescribir la salida de la consulta.......
-        q = paginator.get_page(page_number)
-        
-        contexto = { "datosT": q }
-        return render(request, 'transportes/login/tipodeservicios/listar_TiposdeServicios_ajax.html', contexto)
-    else:
-        messages.error(request, "Error no envió datos...")
-        return redirect('transportes:listarTiposdeServicios')
-
-#--------------------SERVICIOS----------------------------------------
-
-def listarServicios(request):
-    login = request.session.get('logueo', False)
-    if login:
-        s = Servicios.objects.all()
-        paginator = Paginator(s, 3) # Mostrar 3 registros por página...
-
-        page_number = request.GET.get('page')
-        #Sobreescribir la salida de la consulta.......
-        s = paginator.get_page(page_number)
-        contextoS = {'datosS': s}
-
-        return render(request, 'transportes/login/servicios/listarServicios.html', contextoS)
-    else:
-        messages.warning(request, "Inicie sesión primero...")
-        return redirect('transportes:loginFormulario')
+    return render(request, 'transportes/login/servicios/listarServicios.html', contextoT)
 
 def registrarServicios(request):
-    u = TiposdeServicios.objects.all()
-    contexto = {'TipoServ': u}
-    return render(request, 'transportes/login/servicios/registrarServicios.html',contexto)
+    return render(request, 'transportes/login/servicios/registrarServicios.html')
 
 def guardarServicios(request):
     try:
-        u =  TiposdeServicios.objects.get(pk = request.POST["tipo_serv"])
-
         if request.method == "POST":
-            q = Servicios(nombre = request.POST["nombre"],tipo_serv = u)
+            q = Servicios(nombre = request.POST["nombre"],caracteristicas = request.POST["caracteristicas"])
             q.save()
 
-            messages.success(request, "Servicio guardado exitosamente")
+            messages.success(request, "servicio guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
 
@@ -505,8 +425,7 @@ def guardarServicios(request):
 
 def formularioEditarServicios(request, id):
     p = Servicios.objects.get(pk = id)
-    c = TiposdeServicios.objects.all()
-    contexto = { "servicios": p, "tipo_serv":c }
+    contexto = { "servicios": p }
     return render(request, 'transportes/login/servicios/editarServicios.html', contexto)
 
 
@@ -515,13 +434,11 @@ def actualizarServicios(request):
         if request.method == "POST":
             #Obtener la instancia de producto a modificar
             p =  Servicios.objects.get(pk = request.POST["id"])
-            c =  TiposdeServicios.objects.get(pk = request.POST["tipo_serv"])
-            p.tipo_serv = c
+            
             p.nombre = request.POST["nombre"]
-           
-
+            p.caracteristicas = request.POST["caracteristicas"]
             p.save()
-            messages.success(request, "Servicio actualizado correctamente!!")
+            messages.success(request, "servicio actualizado correctamente!!")
         else:
             messages.warning(request, "Usted no ha enviado datos...")
     except Exception as e:
@@ -532,9 +449,9 @@ def actualizarServicios(request):
 
 def eliminarServicios(request, id):
     try:
-        p =  Servicios.objects.get(pk = id)
+        p = Servicios.objects.get(pk = id)
         p.delete()
-        messages.success(request, "Servicio eliminado correctamente!!")
+        messages.success(request, "servicio eliminado correctamente!!")
     except IntegrityError:
         messages.warning(request, "No puede eliminar este producto porque otros registros están relacionados con él....")
     except Exception as e:
@@ -554,7 +471,7 @@ def buscarServicios(request):
         #Sobreescribir la salida de la consulta.......
         q = paginator.get_page(page_number)
         
-        contexto = { "datosS": q }
+        contexto = { "datosT": q }
         return render(request, 'transportes/login/servicios/listar_Servicios_ajax.html', contexto)
     else:
         messages.error(request, "Error no envió datos...")
@@ -829,13 +746,21 @@ def registrarVehiculo(request):
 def guardarVehiculo(request):
     try:
         if request.method == "POST":
+            
+            if request.FILES:
+                fss = FileSystemStorage()
+                f = request.FILES["foto"]
+                file = fss.save("transportes/fotos/" + f.name, f)
+            else:
+                file = 'transportes/fotos/default.webp'
+                
             u = Proveedores.objects.get(pk = request.POST["proveedor"])
             q = Vehiculo(
                 proveedor = u,
                 placa = request.POST["placa"],
                 marca = request.POST["marca"],
                 color = request.POST["color"],
-                foto = request.POST["foto"])
+                foto = file)
             q.save()
 
             messages.success(request, "Vehiculo guardado exitosamente")
@@ -879,6 +804,18 @@ def actualizarVehiculo(request):
 def eliminarVehiculo(request, id):
     try:
         p =Vehiculo.objects.get(pk = id)
+        
+         #Obtener ruta de la foto
+        foto = str(BASE_DIR) + str(p.foto.url) 
+        
+        #Averiguar si existe la foto en esa ruta obtenida
+        if path.exists(foto):
+            #Caso especial no borrar foto por defecto.
+            if p.foto.url != '/uploads/transportes/fotos/default.webp':
+                remove(foto)
+        else:
+            messages.warning(request, "No se encontró la foto...")
+            
         p.delete()
         messages.success(request, "Vehiculo eliminado correctamente!!")
     except IntegrityError:

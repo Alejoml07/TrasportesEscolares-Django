@@ -20,15 +20,10 @@
           <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="nombre">
         </div>
         <div class="mb-3 mt-3">
-          <label>Tipo de servicio:</label>
-          <select class="form-control" name="tipo_serv">
-              <option value="">Seleccione:</option>
-              {% for c in TipoServ %}
-                  <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
-              {% endfor %}
-          </select>
-          
-          </div>
+          <label for="" class="form-label">caracteristicas:</label>
+          <input type="text" class="form-control" id="" placeholder="Ingrese caracteristicas" name="caracteristicas">
+        </div>
+        
           
         
         <button type="submit" class="btn btn-primary">Enviar</button>

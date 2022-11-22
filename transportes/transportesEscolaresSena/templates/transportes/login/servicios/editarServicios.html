@@ -21,15 +21,9 @@
           <input type="text" class="form-control" id=""  value="{{ servicios.nombre }}" name="nombre">
         </div>
         <div class="mb-3 mt-3">
-          <label>Tipo de servicio:</label>
-            <select class="form-control" name="tipo_serv">
-                <option value="">Seleccione:</option>
-                {% for c in tipo_serv  %}
-                    <option value="{{ c.id }}"{% if servicios.tipo_serv.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
-                {% endfor %}
-            </select>
-
-          </div>
+          <label for="" class="form-label">caracteristicas:</label>
+          <input type="text" class="form-control" id="" value="{{ servicios.caracteristicas }}" name="caracteristicas">
+        </div>
           
         
         <button type="submit" class="btn btn-primary">Enviar</button>

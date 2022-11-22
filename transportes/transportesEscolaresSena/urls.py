@@ -36,15 +36,6 @@ urlpatterns = [
     path('eliminarComentarios/<int:id>', views.eliminarComentarios, name = "eliminarComentarios"),
     path('buscarComentarios/', views.buscarComentarios, name="buscarComentarios"),
 
-    #--------------------------TiposdeServicios-----------------------------------
-    path('listarTiposdeServicios/', views.listarTiposdeServicios, name = "listarTiposdeServicios"),
-    path('registrarTiposdeServicios/', views.registrarTiposdeServicios, name = "registrarTiposdeServicios"),
-    path('guardarTiposdeServicios/', views.guardarTiposdeServicios, name = "guardarTiposdeServicios"),
-    path('formularioEditarTiposdeServcios/<int:id>', views.formularioEditarTiposdeServcios, name = "formularioEditarTiposdeServcios"),
-    path('actualizarTiposdeServicios/', views.actualizarTiposdeServicios, name = "actualizarTiposdeServicios"),
-    path('eliminarTiposdeServicios/<int:id>', views.eliminarTiposdeServicios, name = "eliminarTiposdeServicios"),
-    path('buscarTiposdeServicios/', views.buscarTiposdeServicios, name="buscarTiposdeServicios"),
-
     #--------------------------Servicios-----------------------------------
     path('listarServicios/', views.listarServicios, name = "listarServicios"),
     path('registrarServicios/', views.registrarServicios, name = "registrarServicios"),

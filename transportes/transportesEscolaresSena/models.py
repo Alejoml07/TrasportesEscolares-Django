@@ -55,19 +55,12 @@ class Comentarios (models.Model):
         return f"{self.cliente} {self.tipo}"
 
 
-class TiposdeServicios (models.Model):
+class Servicios (models.Model):
     nombre = models.CharField(max_length= 100)
     caracteristicas = models.CharField(max_length= 500)
 
     def __str__(self):
         return f" {self.nombre} "
-
-class Servicios (models.Model):
-    nombre = models.CharField(max_length= 100)
-    tipo_serv = models.ForeignKey(TiposdeServicios,on_delete = models.DO_NOTHING)
-    def __str__(self):
-        return f" {self.nombre} "
-
 
 
 class Peticiones(models.Model):
@@ -85,9 +78,9 @@ class Peticiones(models.Model):
 class Vehiculo (models.Model):
     placa = models.CharField(max_length= 100)
     marca = models.CharField(max_length= 100)
-    color = models.EmailField(max_length= 250)
+    color = models.CharField(max_length= 250)
     proveedor = models.ForeignKey(Proveedores,on_delete = models.DO_NOTHING)
-    foto = models.IntegerField()
+    foto = models.ImageField(upload_to = 'transportes/fotos', default='transportes/fotos/default.webp')
     
     
     def __str__(self):
