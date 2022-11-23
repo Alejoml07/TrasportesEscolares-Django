@@ -44,12 +44,6 @@
               {% endif %}
 
               {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'P'  %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'transportes:listarProveedores' %}">Proveedores</a>
-              </li>
-              {% endif %}
-
-              {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'P'  %}
                <li class="nav-item">
                 <a class="nav-link" href="{% url 'transportes:listarVehiculo' %}">Vehiculo</a>
               </li>
